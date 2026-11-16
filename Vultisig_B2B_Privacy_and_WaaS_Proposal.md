@@ -40,6 +40,16 @@ While retail trading volume is cyclical and volatile, institutional and enterpri
 ### 2.3 The Untapped Emerging Market Neobank Demand
 In Latin America (Argentina, Brazil), Sub-Saharan Africa (Nigeria, Kenya), and Southeast Asia, local fiat currencies suffer from chronic inflation, and cross-border bank wires incur 5–9% fees with 3–5 day delays. Millions of businesses and consumers are adopting digital dollars ($USDC). However, legacy self-custody wallets (with 12-word seed phrases) suffer an **80%+ drop-off rate** during onboarding. Vultisig’s FastVault provides the missing link: a consumer-grade banking UX backed by non-custodial MPC security.
 
+### 2.4 Launch Target Verticals & Anonymity-Set Sizing Benchmarks
+To eliminate cold-start guesswork before production engineering, commercial validation targets **three concrete B2B verticals** experiencing immediate on-chain privacy leaks today:
+1. **Web3 Payroll & Invoicing Platforms (e.g., Request Finance, Rise Works, Franklin class & distributed Web3 studios):** Teams paying 20–200 remote contributors in USDC want to conceal individual `$1,000–$5,000` salaries and contractor rates from Arkham/Etherscan while exporting ReadOnly logs for accounting.
+2. **Regional Crypto PSPs, Acquirers & OTC Desks (e.g., CoinsPaid, Triple-A, B2BinPay, Bitso Business, Yellow Card class):** Cross-border commercial settlement desks leak supplier lists, procurement cadence, and pricing margins when transacting from public EOA/Safe addresses, yet require strict compliance for banking off-ramps.
+3. **Stablecoin Neobanks, Crypto Card Programs & Fund Treasuries (e.g., THORWallet/Fiat24, Kast, Gnosis Pay class & ecosystem funds):** Card/neobank programs need seedless 2-of-3 MPC security and feed continuous, chaotic retail card top-ups and transfers into the shared pool, while fund treasuries eliminate MEV/copy-trading front-running.
+
+#### Minimum Anonymity-Set Sizing (`k`-Anonymity Math)
+* **B2B-Only Pool (No Retail):** Reaching `k ≥ 20–30` independent transactions per window requires **40–60 active B2B companies** (1–2h windows) or **10–15 active companies** using 12–24h clearing windows. With only 1–3 early clients, a B2B-only pool remains vulnerable to timing/amount correlation.
+* **Hybrid Clean Flow (1–3 B2B Clients + Verified Retail Cover):** Adding **500–1,000 gasless verified retail/card transactions per day** generates `k ≥ 40–80` independent transactions per 2-hour batch window from Day 1. On Base, subsidizing 1,000 batched retail transactions costs **~$5–$10/day in L2 gas**, fully covered by a single `$50k–$100k` B2B payroll (`0.2%` fee = `$100–$200`).
+
 ---
 
 ## 3. Regulatory & Legal Framework: Why Vultisig Requires Zero Licenses
@@ -90,6 +100,12 @@ Instead of Vultisig attempting to secure SOC 2, MSB, or banking licenses in 150 
 * **US Defend Trade Secrets Act (DTSA) & EU Directive 2016/943:** Corporations have a legal mandate to protect proprietary financial data, payrolls, and trade secrets. Public block explorers force businesses to violate this mandate.
 * **FATF Recommendation 16 (Travel Rule):** By embedding Dual-Recipient Encryption into the shielded transaction, the originator and beneficiary information is cryptographically encrypted directly for the accredited compliance partner. Travel Rule requirements are fulfilled on-chain without exposing data to the public internet.
 
+### 3.4 Zero-Friction Verification for Verified Retail "Cover Traffic" (The Fiat24 Pattern)
+To prevent an early B2B pool from becoming transparent without admitting unscreened illicit actors—and without turning Vultisig into a KYC bureau—the pool adopts the exact partner-delegated credential pattern proven in production by **THORWallet** (via **Fiat24** Account NFTs on Arbitrum and **Unblock** for Visa/Mastercard programs):
+1. **Reusable On-Chain KYC Attestations (Zero Clicks, Zero PII):** Millions of wallets on Base and Arbitrum already hold verifiable, non-transferable on-chain credentials issued by regulated entities (e.g., **Coinbase Verifications EAS**, **Fiat24 Account NFTs**, **Binance BAB**, or **Sumsub Reusable IDs**). Any wallet holding a whitelisted attestation can route transfers through the pool without uploading documents to Vultisig.
+2. **Real-Time Node AML Risk Scoring (Privacy Pools Model):** For verified wallet users without an exchange badge, bonded nodes screen the origin address in real time against sanctions/AML oracles (OFAC, Chainalysis Sanctions Oracle, darknet/hack heuristics) with capped daily limits, backed by post-hoc *Proof of Innocence* exclusion sets.
+3. **Gasless Privacy Incentive:** Clean retail users receive **sponsored gasless private transfers** (`$0` ETH required for gas) funded out of B2B settlement fees, creating high-frequency, legally clean cover traffic while Vultisig Labs collects zero PII.
+
 ---
 
 ## 4. Deep Technical Architecture: MPC + ZK Protocol Specification
@@ -100,10 +116,11 @@ This section outlines the exact cryptographic mechanics, data structures, and st
                     [ 2-of-3 MPC Quorum ]
                     (Executive Devices)
                              │
-          Threshold Sign("VULTISIG-AUDIT-v1")
+         KeyGen Encrypted zk_seed (.vult)
+         OR Deterministic Threshold DH (OPRF)
                              │
                              ▼
-         HKDF-SHA256(Threshold_Sig, Salt, Info)
+           HKDF-SHA256(Seed_or_DH_Point, Salt, Info)
                              │
              ┌───────────────┴───────────────┐
              ▼                               ▼
@@ -131,17 +148,20 @@ This section outlines the exact cryptographic mechanics, data structures, and st
    Submit to L2 Smart Contract Pool (Base / Arbitrum)
 ```
 
-### 4.1 Deterministic Key Derivation via DKLS Quorum
-To prevent key-management fragmentation, the enterprise's ZK identity is derived deterministically from its primary DKLS master threshold identity without modifying the underlying ECDSA key-shares.
+### 4.1 Key Derivation Under DKLS (Accounting for ECDSA Nonce Randomness)
+In DKLS23 threshold ECDSA, signing ceremonies intentionally use a fresh random ephemeral nonce ($k$) on every run—meaning passing a raw `TSS-Sign` output into HKDF across separate sessions would yield different keys. To guarantee a **100% static, reproducible ZK identity** without modifying the underlying ECDSA key-shares, Vultisig supports two standard mechanisms:
 
-1. **Ceremony Initialization:** A standard Vultisig 2-of-3 signing ceremony is initiated across authorized devices.
-2. **Context String:** The devices cooperatively sign a fixed, domain-separated message payload:
-   $$\sigma = \text{TSS-Sign}_{DKLS}\Big(\text{"\x19Ethereum Signed Message:\n" } \parallel \text{len}(M) \parallel M\Big)$$
-   $$\text{where } M = \text{"VULTISIG_SHIELDED_SUITE_DERIVATION_SALT_V1"}$$
-3. **Key Expansion via HKDF:** Using RFC 5869 (HKDF with SHA-256):
-   $$PRK = \text{HKDF-Extract}(\text{Salt}=\text{"Vultisig-ZK-Salt"}, \text{IKM}=\sigma)$$
-   $$sk_{spend} = \text{HKDF-Expand}(PRK, \text{"SPENDING_KEY"}, 32)$$
-   $$sk_{view} = \text{HKDF-Expand}(PRK, \text{"VIEWING_KEY"}, 32)$$
+1. **Vault Metadata Persistence (Pragmatic MVP Path):**
+   * During the initial KeyGen ceremony, a 32-byte `zk_seed` is generated client-side, encrypted under the vault's threshold identity (or backup key), and persisted inside the encrypted vault file (`vault.dat` / `.vult` / iCloud / GDrive).
+   * The ZK-Viewing Key is static and lives alongside the vault. Exporting a `"ReadOnly Share"` for an auditor requires **zero recurring signing ceremonies**.
+2. **Deterministic Threshold Diffie-Hellman / OPRF (Pure Cryptographic Path):**
+   * For stateless on-the-fly derivation without persisted seed metadata, the MPC quorum computes a deterministic Threshold DH curve point over a domain-separated hash-to-curve payload $M = \text{"VULTISIG\_SHIELDED\_SUITE\_V1"}$:
+     $$P_{\text{OPRF}} = sk_{\text{master}} \cdot H_{\text{curve}}(M)$$
+   * Because Threshold DH involves **no ephemeral ECDSA nonce**, $P_{\text{OPRF}}$ is mathematically identical across every run.
+3. **Key Expansion via HKDF:** Using RFC 5869 (HKDF with SHA-256), where $\text{IKM}$ is either `zk_seed` or $P_{\text{OPRF}}$:
+   $$PRK = \text{HKDF-Extract}(\text{Salt}=\text{"Vultisig-ZK-Salt"}, \text{IKM})$$
+   $$sk_{spend} = \text{HKDF-Expand}(PRK, \text{"SPENDING\_KEY"}, 32)$$
+   $$sk_{view} = \text{HKDF-Expand}(PRK, \text{"VIEWING\_KEY"}, 32)$$
 4. **Public Key Derivation on BabyJubJub Curve:**
    For compatibility with Circom/SnarkJS snark circuits:
    $$pk_{view} = sk_{view} \cdot G_{\text{BabyJubJub}}$$
@@ -203,6 +223,17 @@ Private Inputs:
 4. **Instant Audit Report:** Successfully decrypted notes reconstruct the full transaction journal:
    * Timestamp, counterparty public identifier, exact USDC amount, invoice reference memo.
    * **Security Guarantee:** $sk_{view}$ is mathematically incapable of generating nullifiers or computing threshold DKLS signatures. The auditor has **read-only access**. Even if the auditor’s machine is seized or compromised, treasury funds remain completely unspendable.
+
+### 4.5 Own-Pool Fork Economics, Dynamic Batching & $VULT Node Operations
+Integrating directly with an external third-party Railgun deployment imposes a hardcoded **0.25% shield + 0.25% unshield** protocol tax plus third-party broadcaster markups, destroying B2B unit economics. Conversely, deploying an isolated B2B-only fork creates a sparse, easily correlated anonymity set. Vultisig resolves both constraints with an **independent MIT-licensed fork** combined with three simple protocol rules:
+
+1. **Zero External Protocol Tax:** Forking audited MIT contracts (`railgun-privacy/contract` / `0xbow-io/privacy-pools`) removes external DAO taxes completely; 100% of the `0.15%–0.20%` settlement fee remains inside the Vultisig / `$VULT` node ecosystem.
+2. **Dynamic Threshold Batching ("Shuttle" Queue — Zero Locked Corporate Capital):** Companies do not need to park working capital in the pool for weeks. Node relayers hold outgoing withdrawal intents in a dynamic queue that dispatches immediately once `K` independent transfers accumulate (e.g., every 5–15 minutes at peak flow) or at a maximum timeout (e.g., 4–12 hours), breaking block-by-block timing correlation.
+3. **Overlapping Payout Corridors (`$500–$5,000`):** Staff payrolls, contractor invoices, and neobank/card top-ups naturally cluster in the `$500–$5,000` range. Larger treasury settlements are automatically chunked by the client SDK into standard denominations across batch windows so corporate transfers blend seamlessly into verified retail volume.
+4. **Three Concrete Day-1 Roles for Bonded `$VULT` Nodes:**
+   * **AML & Attestation Gatekeepers:** Verify EAS credentials, Fiat24 NFTs, and AML risk scores prior to relaying; penalized via bond slashing if sanctioned/toxic addresses are admitted.
+   * **Gas Sponsors & Batch Relayers:** Pay negligible Base/Arbitrum L2 gas on behalf of retail cover users and payroll recipients (deducted in USDC / funded by B2B fees), coordinating dynamic batch dispatch.
+   * **Association Set Maintainers (ASP):** Quorum-sign periodic updates to the on-chain Clean Association Set Merkle root, isolating any post-hoc compromised deposits so honest enterprises retain spotless CEX/banking compliance scores.
 
 ---
 
@@ -283,19 +314,24 @@ The protocol converts enterprise privacy and B2B transaction volume into structu
                            └───────────────────────────┘
 ```
 
-### 6.1 Bonded Privacy Nodes (Decentralized Coprocessors)
-To route shielded transactions, aggregate zero-knowledge proofs, and maintain state synchronization between L2 shielded pools and the Vultisig client, operators run lightweight **Privacy Routing Nodes**:
-* **Bond Requirement:** 100,000 $VULT locked in an on-chain staking contract on Arbitrum/Base.
-* **Slashing Conditions:** 
-  * Offline penalty (downtime > 5% in an epoch): 0.5% bond burn.
-  * Invalid state propagation or censorship attempt: 10% bond slashing.
-* **Real Yield Mechanism:** 50% of all protocol privacy fees (collected in USDC/USDT) are distributed directly to active bonded node operators pro-rata.
+### 6.1 Bonded Privacy Nodes (Decentralized Relayer & ZK-Coprocessor Network)
+**Critical Architectural Boundary:** `$VULT` nodes **do NOT participate in the user's Keysign ceremony**. `Vultisigner` and local peer-to-peer devices remain completely untouched, keeping standard threshold signing as fast and lightweight as today.
+
+Instead, operators run lightweight nodes functioning strictly as a **Decentralized Privacy Relayer & ZK-Coprocessor Network**:
+* **Why Relayers Are Mandatory:** In any ZK privacy protocol, a user cannot broadcast a private withdrawal from their public wallet without paying ETH gas from a known address—instantly ruining privacy. A third-party relayer must submit the ZK-proof and pay L2 gas.
+* **Bond Requirement:** **100,000 `$VULT`** locked in an on-chain registry contract on Arbitrum/Base to become eligible for profitable B2B relayer jobs routed by Vultisig clients (preventing Sybil attacks and censorship).
+* **Deterministic On-Chain Slashing (Timeout Proof):** Slashing is enforced entirely by the registry smart contract, not off-chain arbitration:
+  1. When a node accepts a relayer job commitment, the contract starts a strict block-window countdown.
+  2. If the node drops the job, stalls beyond the deadline, or attempts MEV reordering/front-running, the user's client submits an on-chain **Timeout Proof**.
+  3. The registry contract automatically **jails** the node (locking its bond for **7–14 days** with zero fee allocation) and **burns a slashing penalty** (`1%` for timeout/downtime; up to `10%` for invalid state or toxic-address admission).
+* **Real Yield Mechanism:** Enterprises pay relayers directly in USDC (`0.15%–0.25%` deducted inside the shielded note); **50%–100%** of net relayer/protocol fees (after negligible Base L2 gas and retail cover subsidies) accrue to active bonded node operators in pure USDC.
 
 ### 6.2 Enterprise Fee-Reduction Locks
-B2B volume follows a strict fee schedule designed to incentivize corporate token locking:
-* **Standard Tier (Zero Lock):** 1.00% protocol fee per shielded settlement.
+B2B volume follows a strict fee schedule designed to incentivize token locking without forcing corporate CFOs to hold volatile assets if restricted by treasury policy:
+* **Standard Tier (Zero Lock):** 1.00% protocol fee per shielded settlement (or flat `0.20%–0.25%` USDC pass-through via accredited partner gateways that stake `$VULT` on behalf of their B2B client base).
 * **Tier 1 (Lock 50,000 $VULT):** 0.50% protocol fee per shielded settlement.
 * **Tier 2 (Lock 100,000 $VULT):** 0.20% protocol fee + Dedicated Compliance Dashboard & Priority Routing.
+* **Zero-Balance-Sheet Friction:** Enterprises preferring pure stablecoin accounting pay flat USDC fees directly; automated fee-to-`$VULT` buybacks and partner gateway locks absorb token supply under the hood.
 
 ### 6.3 Mathematical Supply Squeeze Model
 Assume conservative mid-term adoption:
@@ -437,24 +473,26 @@ Beyond financial transactions, global institutions face catastrophic liabilities
 
 ```
 PHASE 1: Core ZK-Module, Key Derivation & Testnet MVP (Months 1–3) [$70k Budget]
+├── [Validation] Secure 3 Design Partner LOIs across Payroll, PSP/OTC & Card/Neobank verticals.
 ├── [Core] Integrate BabyJubJub curve & Poseidon hash into @vultisig/lib-dkls (WASM).
-├── [DKLS] Implement deterministic derivation: HKDF(TSS-Sign("VULTISIG-AUDIT-v1")) -> (sk_spend, sk_view).
-├── [Contracts] Fork & deploy audited Circom Groth16 shielded contracts on Base Sepolia.
+├── [DKLS] Implement vault-bound zk_seed persistence (.vult) & Threshold DH (OPRF) -> (sk_spend, sk_view).
+├── [Contracts] Fork audited MIT shielded contracts (0% external fee) + EAS/AML gatekeeper on Base Sepolia.
+├── [Relayer] Ship dynamic batching ("Shuttle") relayer with gasless verified-retail cover routing.
 ├── [Client] Build "Export Audit Package" & "Auditor View-Only Mode" into Vultisig Desktop.
 └── [Milestone] Live Testnet Demo & Public Strategic Announcement.
 
 PHASE 2: Audits, Compliance Gateways & Neobank WaaS SDK (Months 4–6) [Self-Funded]
 ├── [Security] Contract third-party audit (ABDK / Trail of Bits / Halborn) funded via grants/fees.
-├── [Circuits] Deploy Dual-Recipient Encryption verification circuits.
-├── [Contracts] Integrate Ethereum Attestation Service (EAS) verifier for Whitelist Gateways.
+├── [Circuits] Deploy Dual-Recipient Encryption & Association Set (Proof of Innocence) circuits.
+├── [Contracts] Integrate Coinbase Verifications, Fiat24 NFT & regional Gateway EAS verifiers.
 ├── [WaaS] Package @vultisig/waas-sdk for iOS/Android (Biometric Secure Enclave + FastVault).
-└── [Pilots] Onboard 3 licensed compliance partners (US/EU) & 2 regional neobanks.
+└── [Pilots] Onboard 3 licensed compliance partners (US/EU) & 3 B2B design partners / neobanks.
 
 PHASE 3: Node Network, Token Mechanics & Mainnet Launch (Months 7–9) [Node-Funded]
 ├── [Staking] Deploy 100k $VULT Node Staking & Slashing contracts on Base/Arbitrum.
-├── [Relayers] Release lightweight Go/Rust daemon for bonded node operators.
-├── [Tiers] Implement fee-tier deduction logic based on on-chain locked $VULT balance.
-└── [Revenue] Activate automated USDC Real Yield distribution to active node operators.
+├── [Relayers] Release lightweight Go/Rust daemon for AML screening, gas sponsoring & dynamic batching.
+├── [Tiers] Implement fee-tier deduction & partner gateway lock logic in USDC/VULT.
+└── [Revenue] Activate automated USDC Real Yield distribution & retail gas subsidy pool.
 ```
 
 ---
@@ -470,4 +508,4 @@ The technical foundations exist:
 * The team has the necessary $70,000 runway to deliver a working Phase 1 Testnet MVP.
 * The market narrative and subsequent fee revenue will organically fund the path to Mainnet.
 
-**Recommended Action for Core Leadership:** Authorize the Phase 1 90-day technical sprint: fork the open-source circuits, implement the deterministic viewing-key derivation in `@vultisig/lib-dkls`, and execute the first shielded corporate payroll on Base Sepolia.
+**Recommended Action for Core Leadership:** Authorize the Phase 1 90-day technical sprint: fork the open-source circuits, implement static vault-bound / Threshold-DH viewing-key derivation alongside `@vultisig/lib-dkls` (keeping Keysign untouched), and execute the first shielded corporate payroll on Base Sepolia.
