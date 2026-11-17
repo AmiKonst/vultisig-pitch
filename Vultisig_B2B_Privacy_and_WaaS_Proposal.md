@@ -1,9 +1,10 @@
 # Strategic Architecture & Technical Specification: Institutional Privacy & Wallet-as-a-Service (WaaS) for Vultisig
 
-**Authors:** KT  
+**Document ID:** RFC-VULT-2024-01  
+**Authors:** Vultisig Strategic Architecture Initiative  
 **Target Audience:** Core Protocol Engineers, Cryptographers, Leadership, and Ecosystem Builders  
 **Status:** Comprehensive Technical Proposal & Phased Implementation Blueprint  
-**Date:** November 2026 
+**Date:** November 2024  
 
 ---
 
@@ -48,7 +49,7 @@ To eliminate cold-start guesswork before production engineering, commercial vali
 
 #### Minimum Anonymity-Set Sizing (`k`-Anonymity Math)
 * **B2B-Only Pool (No Retail):** Reaching `k ≥ 20–30` independent transactions per window requires **40–60 active B2B companies** (1–2h windows) or **10–15 active companies** using 12–24h clearing windows. With only 1–3 early clients, a B2B-only pool remains vulnerable to timing/amount correlation.
-* **Hybrid Clean Flow (1–3 B2B Clients + Verified Retail Cover):** Adding **500–1,000 gasless verified retail/card transactions per day** generates `k ≥ 40–80` independent transactions per 2-hour batch window from Day 1. On Base, subsidizing 1,000 batched retail transactions costs **~$5–$10/day in L2 gas**, fully covered by a single `$50k–$100k` B2B payroll (`0.2%` fee = `$100–$200`).
+* **Hybrid Clean Flow (1–3 B2B Clients + Verified Retail Cover):** Adding **500–1,000 gasless verified retail/card transactions per day** generates `k ≥ 40–80` independent transactions per 2-hour batch window from Day 1. On Base, subsidizing 1,000 batched retail transactions costs **~$5–$10/day in L2 gas**, fully covered by a single `$50k–$100k` B2B payroll (`0.25%` base fee = `$125–$250`).
 
 ---
 
@@ -120,12 +121,14 @@ This section outlines the exact cryptographic mechanics, data structures, and st
         ▼                                         ▼
 [ Viewing & Nullifier Derivation ]     [ Quorum Spend Signing ]
   Separate view_seed (.vult) or          Device 1 + Device 2 each sign
-  Threshold DH (OPRF) -> sk_view         H(nullifier, spend_digest)
-        │                                (Private Keys NEVER leave devices)
+  Threshold DH (OPRF) -> sk_view         H(nullifier, out_wd_hash, relayer_fee)
+  + pk_nullifier = Poseidon1(sk_null)    (Private Keys NEVER leave devices)
+        │                                         │
         ▼                                         │
  Export sk_view to ReadOnly Client                │
  (0/3 Spend Power — Auditors / PwC)               ▼
                                       Construct Shielded Note:
+                                      quorum_hash = Poseidon4(pk_ed_1..3, pk_null)
                                       Note = { asset, amount, quorum_hash,
                                                pk_view_rec, rho, r }
                                                   │
@@ -137,10 +140,10 @@ This section outlines the exact cryptographic mechanics, data structures, and st
         └─────────────────────────────────────────┬──────────────────────┘
                                                   ▼
                     Generate Groth16 / UltraHonk ZK-Proof (Native rapidsnark / Noir):
-                    1. 2-of-3 BabyJubJub EdDSA Quorum Signature Verification (Private)
+                    1. 2-of-3 BabyJubJub EdDSA Quorum + pk_nullifier Binding in quorum_hash
                     2. Proof of Clean Association Set (ASP_root)
                     3. Proof of Gateway Registry Membership (G_root — pk_gateway hidden!)
-                    4. Proof of Equivalence (C_rec and C_comp match Note) & Nullifier
+                    4. Dual-Encryption Equivalence (C_rec, C_comp) & Nullifier Derivation
                                                   │
                                                   ▼
                    Submit to L2 Smart Contract Pool (Base / Arbitrum)
@@ -159,13 +162,14 @@ To guarantee **both** a static ReadOnly viewing key and unbreakable **2-of-3 thr
    * Exporting `sk_view` to an auditor requires zero signing ceremonies and leaks **zero** ability to spend funds or forge quorum approvals.
 2. **Per-Device Independent BabyJubJub EdDSA Keys (Zero Monolithic `sk_spend`):**
    * Each of the 3 executive devices generates and retains its own **hardware-isolated BabyJubJub EdDSA keypair** $(sk_{ed,i}, pk_{ed,i})$ inside Secure Enclave / KeyStore. **Device private keys never leave their device and are never combined on any witness generator.**
-   * The vault's private on-chain spend policy is committed as a single hidden hash inside each note:
-     $$\text{quorum\_hash} = \text{Poseidon3}(pk_{ed,1}, pk_{ed,2}, pk_{ed,3})$$
-   * To spend a note, any 2 of 3 devices independently sign the spend digest $\mu = \text{Poseidon3}(\text{nullifier}, \text{out\_hash}, \text{fee\_and\_relayer})$ over P2P WebRTC and return only their signatures $(\sigma_a, \sigma_b)$. The initiating client feeds $(\sigma_a, \sigma_b, pk_{ed,1}, pk_{ed,2}, pk_{ed,3})$ as **Private Inputs** into the circuit (`EdDSAPoseidonVerifier` in `circomlib`), proving 2-of-3 authorization **without ever revealing the quorum public keys on-chain** and without any single device holding 2 keys.
-3. **Nullifier Key Separation (`sk_nullifier`):**
-   * `sk_nullifier` is derived separately from `sk_view` (e.g., via a separate Threshold DH / OPRF domain `"VULTISIG_NULLIFIER_V1"` or secret share held alongside the device), so an external auditor holding `sk_view` cannot precompute nullifiers to correlate future unspends, while theft remains impossible without 2-of-3 device EdDSA signatures.
+   * To cryptographically bind the nullifier secret and prevent a malicious signer from grinding arbitrary `sk_nullifier` values to double-spend a note, the vault's private on-chain spend policy commits to **both** the 2-of-3 device public keys and the nullifier public commitment $pk_{nullifier} = \text{Poseidon1}(sk_{nullifier})$:
+     $$\text{quorum\_hash} = \text{Poseidon4}(pk_{ed,1}, pk_{ed,2}, pk_{ed,3}, pk_{nullifier})$$
+   * To spend a note, any 2 of 3 devices independently sign the spend digest $\mu = \text{Poseidon3}(\text{nullifier}, \text{out\_and\_withdrawal\_hash}, \text{fee\_and\_relayer})$ over P2P WebRTC and return only their signatures $(\sigma_a, \sigma_b)$. The initiating client feeds $(\sigma_a, \sigma_b, pk_{ed,1}, pk_{ed,2}, pk_{ed,3}, pk_{nullifier}, sk_{nullifier})$ as **Private Inputs** into the circuit (`EdDSAPoseidonVerifier` in `circomlib`), proving 2-of-3 authorization **without ever revealing the quorum public keys or `pk_nullifier` on-chain** and without any single device holding 2 keys.
+3. **Nullifier Key Separation (`sk_nullifier` Committed via `pk_nullifier`):**
+   * `sk_nullifier` is derived separately from `sk_view` (e.g., via a separate Threshold DH / OPRF domain `"VULTISIG_NULLIFIER_V1"` or dedicated vault secret), and only its one-way hash $pk_{nullifier} = \text{Poseidon1}(sk_{nullifier})$ is bound inside `quorum_hash`.
+   * Because an external auditor holding `sk_view` only observes `quorum_hash` (not `pk_nullifier` or `sk_nullifier`), they cannot precompute nullifiers to correlate future unspends. Meanwhile, because `pk_nullifier` is hashed inside `note.quorum_hash`, even a compromised quorum cannot double-spend a note by altering `sk_nullifier`.
 4. **Device Loss & Shielded Key Resharing:**
-   * If Device 1 is lost, Devices 2 and 3 co-sign a shielded self-transfer (`Note_old -> Note_new`) sweeping notes to $\text{quorum\_hash}_{\text{new}} = \text{Poseidon3}(pk_{ed,1}^{\text{new}}, pk_{ed,2}, pk_{ed,3})$ privately inside the pool.
+   * If Device 1 is lost, Devices 2 and 3 co-sign a shielded self-transfer (`Note_old -> Note_new`) sweeping notes to $\text{quorum\_hash}_{\text{new}} = \text{Poseidon4}(pk_{ed,1}^{\text{new}}, pk_{ed,2}, pk_{ed,3}, pk_{nullifier})$ privately inside the pool.
 
 ### 4.2 Shielded Note, Commitment & Ring-Buffer State
 All shielded balances inside the pool are represented as UTXO notes over the BN254 (alt_bn128) elliptic curve:
@@ -174,7 +178,7 @@ All shielded balances inside the pool are represented as UTXO notes over the BN2
 struct ShieldedNote {
     asset_id: u256,       // ERC-20 contract address (e.g., Base.USDC)
     amount: u64,          // Token amount (atomic units)
-    quorum_hash: [u8; 32],// Poseidon3(pk_ed_1, pk_ed_2, pk_ed_3) — hidden 2-of-3 spend policy
+    quorum_hash: [u8; 32],// Poseidon4(pk_ed_1, pk_ed_2, pk_ed_3, pk_nullifier) — bound spend + nullifier policy
     pk_view: [u8; 32],    // BabyJubJub public key for recipient decryption
     rho: [u8; 32],        // Nullifier uniqueness seed
     r: [u8; 32],          // Blinding factor for hiding commitment
@@ -191,21 +195,22 @@ struct ShieldedNote {
 To avoid heavy ElGamal bit-unpacking constraints in-circuit and **prevent chain analytics from stripping out retail cover traffic via public gateway keys**, encryption uses **BabyJubJub ECDH + Poseidon Sponge AEAD** with **private gateway verification**:
 
 1. **Circuit-Efficient ECDH + Poseidon Encryption:**
-   * Using an ephemeral secret $k_{eph}$ (with public $R_{eph} = k_{eph} \cdot G_{\text{BabyJubJub}}$), the sender derives shared keys $K_{rec} = \text{Poseidon2}(k_{eph} \cdot pk_{view\_rec})$ and $K_{comp} = \text{Poseidon2}(k_{eph} \cdot pk_{gateway\_epoch})$.
+   * Using an ephemeral secret $k_{eph}$ (with public $R_{eph} = k_{eph} \cdot G_{\text{BabyJubJub}}$), the sender computes BabyJubJub ECDH curve points $S_{rec} = k_{eph} \cdot pk_{view\_rec}$ and $S_{comp} = k_{eph} \cdot pk_{gateway\_epoch}$, then derives symmetric keys from their affine coordinates:
+     $$K_{rec} = \text{Poseidon2}(S_{rec}.x, S_{rec}.y), \quad K_{comp} = \text{Poseidon2}(S_{comp}.x, S_{comp}.y)$$
    * Both ciphertexts $C_{rec}$ and $C_{comp}$ encrypt the exact same note plaintext via Poseidon sponge encryption inside the circuit (~5–10x fewer constraints than naive ElGamal).
 2. **Hidden `pk_gateway_epoch` (Anti-Filter Protection) & Epoch Key Rotation:**
    * **Never expose `pk_gateway_epoch` as a Public Input.** If a company's gateway key were public on-chain, analytics tools could immediately isolate that company's transactions from retail cover traffic (`k = 1`).
-   * Instead, an on-chain **Approved Gateway Registry Merkle Root ($G_{root}$)** is passed as a Public Input, while `(gateway_id, epoch, pk_gateway_epoch)` and its Merkle proof in $G_{root}$ are **Private Inputs**.
+   * Instead, an on-chain **Approved Gateway Registry Merkle Root ($G_{root}$)** (updated on-chain to contain only currently active epoch leaves) is passed as a Public Input, while `(gateway_id, epoch, pk_gateway_epoch)` and its Merkle proof in $G_{root}$ are **Private Inputs**.
    * **Epoch Rotation:** Gateways publish rotating epoch keys (e.g., monthly/quarterly) in $G_{root}$, ensuring that even if a historical key is subpoenaed or compromised, blast radius is strictly bounded to that epoch rather than exposing years of payroll history.
    * **Cover Traffic Parity:** Verified retail cover transfers encrypt $C_{comp}$ to an active ASP/Gateway epoch key from the **same $G_{root}$**, making B2B and retail transactions structurally indistinguishable on-chain.
 
 #### The ZK Proof of Equivalence & Quorum Circuit
 The circuit validates all constraints in zero-knowledge:
-1. **2-of-3 Threshold Spend:** Two valid BabyJubJub EdDSA signatures from distinct keys in `(pk_ed_1, pk_ed_2, pk_ed_3)` sign the spend digest, and `Poseidon3(pk_ed_1, pk_ed_2, pk_ed_3) == note.quorum_hash`.
+1. **2-of-3 Threshold Spend & Nullifier Binding:** Two valid BabyJubJub EdDSA signatures from distinct keys in `(pk_ed_1, pk_ed_2, pk_ed_3)` sign the spend digest $\mu$, `Poseidon1(sk_nullifier) == pk_nullifier`, and `Poseidon4(pk_ed_1, pk_ed_2, pk_ed_3, pk_nullifier) == note.quorum_hash`.
 2. **State & Clean Association Set:** The spent note exists in state root $R$ and its deposit commitment belongs to the approved **Clean Association Set ($ASP_{root}$)**.
 3. **Gateway Registry Inclusion:** `pk_gateway_epoch` belongs to the active on-chain Gateway Registry root $G_{root}$ for the current valid epoch.
-4. **Dual-Encryption Equivalence:** $C_{rec}$ and $C_{comp}$ encrypt the exact same $(\text{asset\_id}, \text{amount}, \text{rho})$ under $pk_{view\_rec}$ and $pk_{gateway\_epoch}$ respectively.
-5. **Nullifier & Value Conservation:** Nullifier is validly derived and $\sum \text{inputs} = \sum \text{outputs} + \text{relayer\_fee}$.
+4. **Dual-Encryption Equivalence:** $C_{rec}$ and $C_{comp}$ encrypt the exact same $(\text{asset\_id}, \text{amount}, \text{quorum\_hash}, \text{rho}, \text{r})$ note payload under $K_{rec}$ and $K_{comp}$ respectively.
+5. **Nullifier & Value Conservation:** `Nullifier == Poseidon3(sk_nullifier, rho, commitment_index)` and $\sum \text{inputs} = \sum \text{outputs} + \text{withdrawal\_amount} + \text{relayer\_fee}$.
 
 ```
 Public Inputs:
@@ -215,12 +220,12 @@ Public Inputs:
 ├── Nullifier(s) & Output Commitment(s)
 ├── Ephemeral Public Key (R_eph)
 ├── Ciphertext_Recipient (C_rec) & Ciphertext_Compliance (C_comp)
-└── Public Withdrawal Digest (amount, recipient, fee — 0 for internal shielded transfers)
+└── Public Withdrawal Digest (amount, recipient, relayer, fee — 0 for internal transfers)
 
 Private Inputs:
 ├── Note details (asset_id, amount, rho, r, quorum_hash)
 ├── Quorum Public Keys (pk_ed_1, pk_ed_2, pk_ed_3) + 2 EdDSA Signatures (sig_a, sig_b)
-├── sk_nullifier & Merkle Path / ASP Path
+├── sk_nullifier, pk_nullifier & Merkle Path / ASP Path
 ├── pk_gateway_epoch + Gateway Merkle Path in G_root
 └── Ephemeral scalar k_eph
 ```
@@ -228,15 +233,15 @@ Private Inputs:
 ### 4.4 The "ReadOnly" Auditor Interface (0/3 Signing Power)
 1. **Profile Export:** The enterprise exports a JSON payload containing $sk_{view}$ (never $sk_{ed,i}$ and never $sk_{nullifier}$) and the gateway attestation identifier.
 2. **Auditor Client:** The auditor (PwC, internal compliance, tax inspector) loads this profile into an **Auditor-Mode Vultisig Desktop/Web Client**.
-3. **Deterministic Decryption:** The auditor client performs ECDH with each event's $R_{eph}$ and decrypts matching $C_{rec}$ payloads:
-   $$K_{rec} = \text{Poseidon2}(sk_{view} \cdot R_{eph}), \quad \text{Decrypt}(K_{rec}, C_{rec})$$
+3. **Deterministic Decryption:** The auditor client performs BabyJubJub ECDH ($S_{rec} = sk_{view} \cdot R_{eph}$) and decrypts matching $C_{rec}$ payloads:
+   $$K_{rec} = \text{Poseidon2}(S_{rec}.x, S_{rec}.y), \quad \text{Decrypt}(K_{rec}, C_{rec})$$
 4. **Instant Audit Report:** Successfully decrypted notes reconstruct the full incoming/outgoing invoice journal (timestamp, counterparty identifier, exact USDC amount, invoice memo).
-   * **Security Guarantee:** $sk_{view}$ cannot generate nullifiers and cannot produce the 2-of-3 BabyJubJub EdDSA signatures required by the circuit. Even total compromise of the auditor's machine leaves treasury funds 100% unspendable.
+   * **Security Guarantee:** $sk_{view}$ cannot generate nullifiers (as `sk_nullifier` is separate and never exported) and cannot produce the 2-of-3 BabyJubJub EdDSA signatures required by the circuit. Even total compromise of the auditor's machine leaves treasury funds 100% unspendable.
 
 ### 4.5 Own-Pool Fork Economics, Amount-Leak Prevention & Mobile Proving
 Integrating directly with an external third-party Railgun deployment imposes a hardcoded **0.25% shield + 0.25% unshield** protocol tax plus third-party broadcaster markups, while upstream audits do not cover custom dual-encryption or 2-of-3 EdDSA circuits. Vultisig addresses both security and unit economics with four strict engineering rules:
 
-1. **Clean-Room Fork + Independent Circuit Audit:** Fork MIT-licensed `0xbow-io/privacy-pools` / `railgun-privacy/contract` foundations (`0%` external DAO tax; `0.15%–0.20%` stays in the Vultisig / `$VULT` ecosystem). Because adding 2-of-3 EdDSA + hidden gateway verification modifies the Circom/Noir circuits, **Mainnet launch explicitly gates on a dedicated circuit + contract audit and a Phase-2 Trusted Setup ceremony (or migrating to Noir/UltraHonk to eliminate circuit-specific trusted setups)**.
+1. **Clean-Room Fork + Independent Circuit Audit:** Fork MIT-licensed `0xbow-io/privacy-pools` / `railgun-privacy/contract` foundations (`0%` external DAO tax; `0.12%–0.25%` across fee tiers—`0.25%` base split `60%` relayer nodes / `40%` protocol & buybacks—stays in the Vultisig / `$VULT` ecosystem). Because adding 2-of-3 EdDSA + hidden gateway verification modifies the Circom/Noir circuits, **Mainnet launch explicitly gates on a dedicated circuit + contract audit and a Phase-2 Trusted Setup ceremony (or migrating to Noir/UltraHonk to eliminate circuit-specific trusted setups)**.
 2. **Native Mobile Proving (No SnarkJS in WebView):** Generating ~60k–90k constraint proofs in `snarkjs`/JS on budget Android phones in LatAm/Africa takes 15–30+ seconds and risks OOM crashes. Production mobile SDKs bundle **native C++/Rust `rapidsnark` (or Noir Barretenberg)** bindings alongside `@vultisig/lib-dkls`, targeting `< 2–3s` client proving times.
 3. **Two-Mode Payouts (Eliminating Odd-Amount Unshield Fingerprints):**
    * *Internal Shielded Payroll (Zero Amount Leakage):* Exact odd amounts (e.g., `$3,420.50`) transfer **shielded-to-shielded** inside the pool (`Note_Company -> Note_Employee`). No amount ever touches public L2 calldata.
@@ -356,7 +361,7 @@ Corporations are **never required** to buy or hold `$VULT` on their balance shee
 ### 6.3 Realistic Revenue & Token Sink Scenarios (Dual-Engine Math)
 Rather than assuming every corporate client buys and locks `$VULT`, token demand is anchored in **permissionless node operators chasing real USDC yield**, **optional partner/PSP locks**, and **programmatic buybacks** funded by *both* WaaS and ZK-Pool USDC revenue (allocating e.g. **25% of protocol net revenue** to programmatic `$VULT` buybacks):
 
-| Metric | Conservative (Month 9) | Base Case (Month 15) | Scale Case (Month 24) |
+| Metric | Conservative (Month 14) | Base Case (Month 18) | Scale Case (Month 24) |
 | :--- | :--- | :--- | :--- |
 | **Active WaaS Fintechs / Neobanks** | 4 partners (`80k` MAU) | 12 partners (`300k` MAU) | 30 partners (`1M` MAU) |
 | **WaaS Monthly Swap/Bridge Volume** | `$20M / mo` (`0.30%`) | `$75M / mo` (`0.30%`) | `$250M / mo` (`0.25%`) |
@@ -432,7 +437,9 @@ A realistic engineering view is critical here: while **~75–85% of foundational
 
 ---
 
-## 9. Strategic Horizon: Beyond Payments — Zero-Trust Identity & Anti-Deepfake Protocol
+## 9. Strategic Horizon (Post-Mainnet R&D — Outside Core 14-Month Budget): Zero-Trust Identity & Anti-Deepfake Protocol
+
+*Scope Note: The capabilities in this section represent long-term post-Mainnet R&D expansion and are explicitly **excluded** from the Phase 1–3 (`$565k–$810k`) execution budget above.*
 
 Vultisig’s underlying technology is not merely a financial transfer mechanism—it is a **decentralized, threshold-secured cryptographic identity layer**. In an era where Generative AI has destroyed the trustworthiness of audio and video communications, Vultisig possesses the exact mathematical architecture to secure corporate communications and critical data assets.
 
@@ -500,7 +507,7 @@ PHASE 2: Independent ZK Audits, Cover-Flow Integration & B2B Mainnet (Months 5�
 ├── [M5–M7 | Mobile Prover] Bundle native C++/Rust rapidsnark (or Noir UltraHonk) alongside @vultisig/lib-dkls (<3s proving) + Auditor UI.
 ├── [M6–M8 | Compliance] Execute non-custodial legal opinion & integrate 2–3 licensed regional gateways/ASPs (ASP_root + G_root).
 ├── [M7–M8 | Remediation] Resolve audit findings, run Phase-2 Trusted Setup (if Groth16) & launch Immunefi bug bounty reserve.
-└── [M9 | Mainnet Launch] Route attested WaaS/card retail traffic as gasless cover flow and launch Compliant B2B ZK-Pool Mainnet.
+└── [M9 | Mainnet Launch] Route attested WaaS/card retail traffic as gasless cover flow and launch Compliant B2B ZK-Pool Mainnet (using initial protocol/partner relayers until Phase 3 permissionless staking opens).
 
 PHASE 3: Permissionless $VULT Relayer Network & Dual-Engine Tokenomics (Months 10–14) [$115k–$165k]
 ├── [M10–M11 | Contracts] Build 100k $VULT Relayer Registry, Timeout Proof Slashing, 60/40 USDC Splitter & optional fee-tier contracts.
