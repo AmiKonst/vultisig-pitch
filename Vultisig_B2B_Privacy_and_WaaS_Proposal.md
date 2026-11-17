@@ -3,7 +3,7 @@
 **Authors:** KT  
 **Target Audience:** Core Protocol Engineers, Cryptographers, Leadership, and Ecosystem Builders  
 **Status:** Comprehensive Technical Proposal & Phased Implementation Blueprint  
-**Date:** November 2026  
+**Date:** November 2026 
 
 ---
 
@@ -13,12 +13,12 @@ Public blockchains suffer from an existential dilemma: **radical transparency em
 
 This document outlines a **production-ready, legally immune, and cryptographically verified architecture** designed specifically for Vultisig’s Threshold Signature Scheme (TSS / DKLS) stack:
 
-1. **Compliant B2B Privacy Layer:** Deploys audited ZK-Shielded Pools on high-throughput Layer 2s (Arbitrum, Base). By deriving a deterministic, non-signing **"ReadOnly Share" (Viewing Key)** via DKLS threshold signatures and utilizing **Dual-Recipient Encryption**, enterprises achieve 100% commercial confidentiality against competitors while preserving automated, real-time auditability for tax authorities and accounting firms (PwC, Deloitte).
-2. **Absolute Regulatory Immunity for Vultisig (No Licensing Required):** Under FinCEN Guidance FIN-2019-G001 and EU MiCA Recital 22, unhosted wallet software developers are **not** Money Services Businesses (MSBs) or Crypto-Asset Service Providers (CASPs). Compliance, KYB, and Travel Rule reporting are offloaded entirely to regional accredited gateways (the "DistroKid / Spotify" model). Vultisig remains 100% open-source, non-custodial middleware with zero regulatory liability.
-3. **Turnkey Neobank WaaS (Wallet-as-a-Service):** Productizes Vultisig’s **FastVault (2-of-3 MPC)** for regional fintechs in emerging markets (LatAm, Africa, SEA). Provides a seedless, gasless, biometric digital-dollar ($USDC) banking experience with loss-proof key resharing—without requiring the neobank to obtain a full-reserve custodial banking license.
-4. **$VULT Economic Engine:** Creates a multi-sided demand sink through **100,000 $VULT Node Bonds** and **Corporate Fee-Discount Tiers**, locking tens of millions of tokens out of circulation and distributing real yield in stablecoins.
-5. **Bootstrapped $70k Capital Efficiency & Self-Funding Model:** Leveraging battle-tested open-source codebases and modern AI development acceleration, a complete Testnet MVP can be built within **3 months using current treasury reserves ($70,000)**. The resulting market momentum and swap fees will self-fund audits and Mainnet scaling without diluting treasury runways.
-6. **Strategic Horizon (Beyond Payments):** Extends Vultisig’s MPC foundation to solve the critical crisis of the AI era: **Anti-Deepfake Voice/Video Identity Verification** and **Threshold-Encrypted Enterprise Data Vaults**.
+1. **Compliant B2B Privacy Layer:** Deploys ZK-Shielded Pools on high-throughput EVM Layer 2s (Arbitrum, Base). By deriving a deterministic, non-signing **"ReadOnly Share" (Viewing Key)** separately from a **2-of-3 Quorum Spend Circuit**, and utilizing **Zero-Knowledge Dual-Recipient Encryption** with hidden gateway keys, enterprises achieve commercial confidentiality against competitors while preserving automated auditability for tax authorities and accounting firms (PwC, Deloitte).
+2. **Absolute Regulatory Immunity for Vultisig (No Licensing Required):** Under FinCEN Guidance FIN-2019-G001 and EU MiCA Recital 22, unhosted wallet software developers are **not** Money Services Businesses (MSBs) or Crypto-Asset Service Providers (CASPs). KYB, Travel Rule reporting, and Clean Association Set (ASP) curation are offloaded entirely to regional accredited gateways and independent ASPs (the "DistroKid / Spotify" model). Vultisig remains 100% open-source, non-custodial middleware.
+3. **Turnkey Neobank WaaS (Wallet-as-a-Service — Immediate Revenue & Cover Engine):** Productizes Vultisig’s **FastVault (2-of-3 MPC)** across BTC, SOL, and EVM for regional fintechs in emerging markets (LatAm, Africa, SEA). Monetized from Day 1 via SaaS platform fees, active-wallet tiers, and embedded swap/bridge routing (`0.25%–0.40%`), WaaS generates immediate cashflow while seeding the verified retail flow required for ZK pool anonymity.
+4. **Dual-Engine $VULT Economics (No Mandatory Corporate Token Holding):** Anyone can run a stateless privacy relayer by bonding **100,000 $VULT** to earn 60% of ZK settlement fees in pure USDC. Meanwhile, WaaS swap revenue + the protocol's 40% ZK fee share drive programmatic **$VULT** buybacks—even when 100% of enterprises pay flat USDC. Token locking for fee discounts remains strictly optional for high-volume PSPs, gateways, or traders.
+5. **Realistic Phased Capital & Flywheel Execution (12–14 Months | ~$565k–$810k Gross):** Ships the commercial **WaaS SDK** and **ZK-Core Testnet** in Phase 1 (Months 1–4, `$165k–$205k`), funds dedicated ZK circuit audits and Mainnet B2B launch in Phase 2 (Months 5–9, `$285k–$440k`) via WaaS cashflow + L2 grants/treasury, and rolls out permissionless `$VULT` relayer nodes in Phase 3 (Months 10–14, `$115k–$165k`).
+6. **Future R&D Horizon (Post-Mainnet, Out of Phase 1–2 Scope):** Extends Vultisig’s MPC foundation beyond payments into **Anti-Deepfake Voice/Video Identity Verification** and **Threshold-Encrypted Enterprise Data Vaults**.
 
 ---
 
@@ -103,8 +103,8 @@ Instead of Vultisig attempting to secure SOC 2, MSB, or banking licenses in 150 
 ### 3.4 Zero-Friction Verification for Verified Retail "Cover Traffic" (The Fiat24 Pattern)
 To prevent an early B2B pool from becoming transparent without admitting unscreened illicit actors—and without turning Vultisig into a KYC bureau—the pool adopts the exact partner-delegated credential pattern proven in production by **THORWallet** (via **Fiat24** Account NFTs on Arbitrum and **Unblock** for Visa/Mastercard programs):
 1. **Reusable On-Chain KYC Attestations (Zero Clicks, Zero PII):** Millions of wallets on Base and Arbitrum already hold verifiable, non-transferable on-chain credentials issued by regulated entities (e.g., **Coinbase Verifications EAS**, **Fiat24 Account NFTs**, **Binance BAB**, or **Sumsub Reusable IDs**). Any wallet holding a whitelisted attestation can route transfers through the pool without uploading documents to Vultisig.
-2. **Real-Time Node AML Risk Scoring (Privacy Pools Model):** For verified wallet users without an exchange badge, bonded nodes screen the origin address in real time against sanctions/AML oracles (OFAC, Chainalysis Sanctions Oracle, darknet/hack heuristics) with capped daily limits, backed by post-hoc *Proof of Innocence* exclusion sets.
-3. **Gasless Privacy Incentive:** Clean retail users receive **sponsored gasless private transfers** (`$0` ETH required for gas) funded out of B2B settlement fees, creating high-frequency, legally clean cover traffic while Vultisig Labs collects zero PII.
+2. **Independent ASP Exclusion Sets & Stateless Relayer Screening:** Independent, regulated **Association Set Providers (ASPs)**—separate from Vultisig Labs and separate from permissionless gas relayers—maintain the on-chain *Proof of Innocence* Merkle roots using sanctions/AML feeds (OFAC, Chainalysis Sanctions Oracle). Permissionless `$VULT` relayer nodes only perform stateless pre-submission checks against those public ASP roots and refuse tainted deposits, keeping nodes free of discretionary compliance/MSB liability.
+3. **Gasless Privacy Incentive & Unified Ciphertext Format:** Clean retail users receive **sponsored gasless private transfers** (`$0` ETH required for gas) funded out of B2B settlement fees. Crucially, retail cover transactions emit the **exact same circuit shape and hidden compliance ciphertext structure** (encrypted to a public/ASP epoch key in the shared Gateway Registry) so chain analytics cannot filter out retail cover traffic.
 
 ---
 
@@ -113,127 +113,137 @@ To prevent an early B2B pool from becoming transparent without admitting unscree
 This section outlines the exact cryptographic mechanics, data structures, and state transitions for engineering implementation.
 
 ```
-                    [ 2-of-3 MPC Quorum ]
-                    (Executive Devices)
+                    [ 2-of-3 Device Quorum ]
+         (Each Device Holds Independent BabyJubJub EdDSA Share)
                              │
-         KeyGen Encrypted zk_seed (.vult)
-         OR Deterministic Threshold DH (OPRF)
-                             │
-                             ▼
-           HKDF-SHA256(Seed_or_DH_Point, Salt, Info)
-                             │
-             ┌───────────────┴───────────────┐
-             ▼                               ▼
-    [ ZK-Spending Key ]             [ ZK-Viewing Key ]
-     (sk_spend, pk_spend)            (sk_view, pk_view)
-             │                               │
-             │                               ▼
-             │                  Export to ReadOnly Client
-             │                  (Auditors / PwC / Tax Bureau)
-             ▼
-      Construct Shielded Note:
-      Note = { asset, amount, pk_recipient, rho, r }
-             │
-             ├── Encrypt for Recipient: Enc(pk_view_recipient, Note)
-             ├── Encrypt for Compliance: Enc(pk_compliance_gateway, Note)
-             │
-             ▼
-  Generate Groth16 / PLONK ZK-Proof:
-  1. Proof of Clean Association Set (Innocence)
-  2. Proof of Valid Note Commitment
-  3. Proof of Equivalence (Dual Encryption matches)
-  4. Nullifier Derivation
-             │
-             ▼
-   Submit to L2 Smart Contract Pool (Base / Arbitrum)
+        ┌────────────────────┴────────────────────┐
+        ▼                                         ▼
+[ Viewing & Nullifier Derivation ]     [ Quorum Spend Signing ]
+  Separate view_seed (.vult) or          Device 1 + Device 2 each sign
+  Threshold DH (OPRF) -> sk_view         H(nullifier, spend_digest)
+        │                                (Private Keys NEVER leave devices)
+        ▼                                         │
+ Export sk_view to ReadOnly Client                │
+ (0/3 Spend Power — Auditors / PwC)               ▼
+                                      Construct Shielded Note:
+                                      Note = { asset, amount, quorum_hash,
+                                               pk_view_rec, rho, r }
+                                                  │
+        ┌─────────────────────────────────────────┴──────────────────────┐
+        ▼                                                                ▼
+ Encrypt for Recipient (ECDH+Poseidon)                Encrypt for Gateway (ECDH+Poseidon)
+ C_rec = Enc(pk_view_rec, Note)                       C_comp = Enc(pk_gateway_epoch, Note)
+        │                                                                │
+        └─────────────────────────────────────────┬──────────────────────┘
+                                                  ▼
+                    Generate Groth16 / UltraHonk ZK-Proof (Native rapidsnark / Noir):
+                    1. 2-of-3 BabyJubJub EdDSA Quorum Signature Verification (Private)
+                    2. Proof of Clean Association Set (ASP_root)
+                    3. Proof of Gateway Registry Membership (G_root — pk_gateway hidden!)
+                    4. Proof of Equivalence (C_rec and C_comp match Note) & Nullifier
+                                                  │
+                                                  ▼
+                   Submit to L2 Smart Contract Pool (Base / Arbitrum)
+                   (Ring buffer: 4,096 Note roots, 256 ASP roots)
 ```
 
-### 4.1 Key Derivation Under DKLS (Accounting for ECDSA Nonce Randomness)
-In DKLS23 threshold ECDSA, signing ceremonies intentionally use a fresh random ephemeral nonce ($k$) on every run—meaning passing a raw `TSS-Sign` output into HKDF across separate sessions would yield different keys. To guarantee a **100% static, reproducible ZK identity** without modifying the underlying ECDSA key-shares, Vultisig supports two standard mechanisms:
+### 4.1 Quorum-Safe Key Architecture (Preserving 2-of-3 Security + DKLS Compatibility)
+In DKLS23 threshold ECDSA, signing ceremonies intentionally use a fresh random ephemeral nonce ($k$) on every run—meaning raw `TSS-Sign` outputs cannot derive static keys. At the same time, deriving a **monolithic `sk_spend`** from a shared `.vult` seed on a single witness-generating device would break Vultisig's 2-of-3 security model (allowing 1 compromised device or leaked `.vult` backup to drain the shielded pool).
 
-1. **Vault Metadata Persistence (Pragmatic MVP Path):**
-   * During the initial KeyGen ceremony, a 32-byte `zk_seed` is generated client-side, encrypted under the vault's threshold identity (or backup key), and persisted inside the encrypted vault file (`vault.dat` / `.vult` / iCloud / GDrive).
-   * The ZK-Viewing Key is static and lives alongside the vault. Exporting a `"ReadOnly Share"` for an auditor requires **zero recurring signing ceremonies**.
-2. **Deterministic Threshold Diffie-Hellman / OPRF (Pure Cryptographic Path):**
-   * For stateless on-the-fly derivation without persisted seed metadata, the MPC quorum computes a deterministic Threshold DH curve point over a domain-separated hash-to-curve payload $M = \text{"VULTISIG\_SHIELDED\_SUITE\_V1"}$:
-     $$P_{\text{OPRF}} = sk_{\text{master}} \cdot H_{\text{curve}}(M)$$
-   * Because Threshold DH involves **no ephemeral ECDSA nonce**, $P_{\text{OPRF}}$ is mathematically identical across every run.
-3. **Key Expansion via HKDF:** Using RFC 5869 (HKDF with SHA-256), where $\text{IKM}$ is either `zk_seed` or $P_{\text{OPRF}}$:
-   $$PRK = \text{HKDF-Extract}(\text{Salt}=\text{"Vultisig-ZK-Salt"}, \text{IKM})$$
-   $$sk_{spend} = \text{HKDF-Expand}(PRK, \text{"SPENDING\_KEY"}, 32)$$
-   $$sk_{view} = \text{HKDF-Expand}(PRK, \text{"VIEWING\_KEY"}, 32)$$
-4. **Public Key Derivation on BabyJubJub Curve:**
-   For compatibility with Circom/SnarkJS snark circuits:
-   $$pk_{view} = sk_{view} \cdot G_{\text{BabyJubJub}}$$
+To guarantee **both** a static ReadOnly viewing key and unbreakable **2-of-3 threshold spend security**, Vultisig strictly separates **Viewing**, **Nullifier**, and **Quorum Spend** authority:
 
-### 4.2 Shielded Note & Commitment Structure
+1. **Static Viewing Key (`sk_view`) — 0-of-3 Spend Power:**
+   * At KeyGen, a 32-byte `view_seed` is persisted in the encrypted vault file (`.vult`)—or computed deterministically via Threshold Diffie-Hellman (OPRF) over $M = \text{"VULTISIG\_VIEW\_V1"}$ ($P_{\text{OPRF}} = sk_{\text{master}} \cdot H_{\text{curve}}(M)$, zero ephemeral nonce):
+     $$PRK_{view} = \text{HKDF-Extract}(\text{Salt}=\text{"Vultisig-ZK-View-V1"}, \text{view\_seed\_or\_OPRF})$$
+     $$sk_{view} = \text{HKDF-Expand}(PRK_{view}, \text{"VIEWING\_KEY"}, 32), \quad pk_{view} = sk_{view} \cdot G_{\text{BabyJubJub}}$$
+   * Exporting `sk_view` to an auditor requires zero signing ceremonies and leaks **zero** ability to spend funds or forge quorum approvals.
+2. **Per-Device Independent BabyJubJub EdDSA Keys (Zero Monolithic `sk_spend`):**
+   * Each of the 3 executive devices generates and retains its own **hardware-isolated BabyJubJub EdDSA keypair** $(sk_{ed,i}, pk_{ed,i})$ inside Secure Enclave / KeyStore. **Device private keys never leave their device and are never combined on any witness generator.**
+   * The vault's private on-chain spend policy is committed as a single hidden hash inside each note:
+     $$\text{quorum\_hash} = \text{Poseidon3}(pk_{ed,1}, pk_{ed,2}, pk_{ed,3})$$
+   * To spend a note, any 2 of 3 devices independently sign the spend digest $\mu = \text{Poseidon3}(\text{nullifier}, \text{out\_hash}, \text{fee\_and\_relayer})$ over P2P WebRTC and return only their signatures $(\sigma_a, \sigma_b)$. The initiating client feeds $(\sigma_a, \sigma_b, pk_{ed,1}, pk_{ed,2}, pk_{ed,3})$ as **Private Inputs** into the circuit (`EdDSAPoseidonVerifier` in `circomlib`), proving 2-of-3 authorization **without ever revealing the quorum public keys on-chain** and without any single device holding 2 keys.
+3. **Nullifier Key Separation (`sk_nullifier`):**
+   * `sk_nullifier` is derived separately from `sk_view` (e.g., via a separate Threshold DH / OPRF domain `"VULTISIG_NULLIFIER_V1"` or secret share held alongside the device), so an external auditor holding `sk_view` cannot precompute nullifiers to correlate future unspends, while theft remains impossible without 2-of-3 device EdDSA signatures.
+4. **Device Loss & Shielded Key Resharing:**
+   * If Device 1 is lost, Devices 2 and 3 co-sign a shielded self-transfer (`Note_old -> Note_new`) sweeping notes to $\text{quorum\_hash}_{\text{new}} = \text{Poseidon3}(pk_{ed,1}^{\text{new}}, pk_{ed,2}, pk_{ed,3})$ privately inside the pool.
+
+### 4.2 Shielded Note, Commitment & Ring-Buffer State
 All shielded balances inside the pool are represented as UTXO notes over the BN254 (alt_bn128) elliptic curve:
 
 ```rust
 struct ShieldedNote {
     asset_id: u256,       // ERC-20 contract address (e.g., Base.USDC)
     amount: u64,          // Token amount (atomic units)
-    owner_pk: [u8; 32],   // BabyJubJub public key of recipient
+    quorum_hash: [u8; 32],// Poseidon3(pk_ed_1, pk_ed_2, pk_ed_3) — hidden 2-of-3 spend policy
+    pk_view: [u8; 32],    // BabyJubJub public key for recipient decryption
     rho: [u8; 32],        // Nullifier uniqueness seed
     r: [u8; 32],          // Blinding factor for hiding commitment
 }
 ```
 
 * **Note Commitment:**
-  $$C = \text{Poseidon5}(\text{asset\_id}, \text{amount}, \text{owner\_pk}, \text{rho}, \text{r})$$
-* **Merkle State:** Commitments are appended to an on-chain **Incremental Merkle Tree** of depth 32 maintained inside the L2 smart contract.
+  $$C = \text{Poseidon6}(\text{asset\_id}, \text{amount}, \text{quorum\_hash}, \text{pk\_view}, \text{rho}, \text{r})$$
+* **Merkle State & Shuttle-Safe Ring Buffer:** Commitments are appended to an on-chain **Incremental Merkle Tree** of depth 32. To prevent queued proofs from expiring during 4–12 hour "Shuttle" batching windows under 1,000+ daily cover transactions, the contract maintains a ring buffer of **`ROOT_HISTORY_SIZE = 4,096`** historical state roots and **`256`** historical Association Set (ASP) roots.
 * **Nullifier Computation:** To prevent double-spending without revealing which note was spent:
-  $$\text{Nullifier} = \text{Poseidon3}(sk_{spend}, \text{rho}, \text{commitment\_index})$$
+  $$\text{Nullifier} = \text{Poseidon3}(sk_{nullifier}, \text{rho}, \text{commitment\_index})$$
 
-### 4.3 Dual-Recipient Encryption Protocol
-When transferring within the shielded pool, the sender generates two encrypted ciphertexts using asymmetric ElGamal encryption on BabyJubJub:
-* **Ciphertext A (Recipient):**
-  $$C_{rec} = \text{BabyJubJub-ElGamal-Encrypt}(pk_{view\_recipient}, \text{Note})$$
-* **Ciphertext B (Compliance Gateway):**
-  $$C_{comp} = \text{BabyJubJub-ElGamal-Encrypt}(pk_{compliance\_gateway}, \text{Note})$$
+### 4.3 Privacy-Preserving Dual-Recipient Encryption & Hidden Gateway Keys
+To avoid heavy ElGamal bit-unpacking constraints in-circuit and **prevent chain analytics from stripping out retail cover traffic via public gateway keys**, encryption uses **BabyJubJub ECDH + Poseidon Sponge AEAD** with **private gateway verification**:
 
-#### The ZK Proof of Equivalence Circuit
-The circuit validates the following constraints in zero-knowledge:
-1. $C_{rec}$ and $C_{comp}$ encrypt the exact same $(\text{asset\_id}, \text{amount}, \text{rho})$.
-2. The commitment $C$ is correctly computed from the decrypted note attributes.
-3. The spender possesses the valid $sk_{spend}$ corresponding to the spent note's commitment.
-4. The spent note exists within the Merkle tree of root $R$.
-5. The spent note commitment belongs to the pre-approved **Clean Association Set** (excluding sanctioned actors).
+1. **Circuit-Efficient ECDH + Poseidon Encryption:**
+   * Using an ephemeral secret $k_{eph}$ (with public $R_{eph} = k_{eph} \cdot G_{\text{BabyJubJub}}$), the sender derives shared keys $K_{rec} = \text{Poseidon2}(k_{eph} \cdot pk_{view\_rec})$ and $K_{comp} = \text{Poseidon2}(k_{eph} \cdot pk_{gateway\_epoch})$.
+   * Both ciphertexts $C_{rec}$ and $C_{comp}$ encrypt the exact same note plaintext via Poseidon sponge encryption inside the circuit (~5–10x fewer constraints than naive ElGamal).
+2. **Hidden `pk_gateway_epoch` (Anti-Filter Protection) & Epoch Key Rotation:**
+   * **Never expose `pk_gateway_epoch` as a Public Input.** If a company's gateway key were public on-chain, analytics tools could immediately isolate that company's transactions from retail cover traffic (`k = 1`).
+   * Instead, an on-chain **Approved Gateway Registry Merkle Root ($G_{root}$)** is passed as a Public Input, while `(gateway_id, epoch, pk_gateway_epoch)` and its Merkle proof in $G_{root}$ are **Private Inputs**.
+   * **Epoch Rotation:** Gateways publish rotating epoch keys (e.g., monthly/quarterly) in $G_{root}$, ensuring that even if a historical key is subpoenaed or compromised, blast radius is strictly bounded to that epoch rather than exposing years of payroll history.
+   * **Cover Traffic Parity:** Verified retail cover transfers encrypt $C_{comp}$ to an active ASP/Gateway epoch key from the **same $G_{root}$**, making B2B and retail transactions structurally indistinguishable on-chain.
+
+#### The ZK Proof of Equivalence & Quorum Circuit
+The circuit validates all constraints in zero-knowledge:
+1. **2-of-3 Threshold Spend:** Two valid BabyJubJub EdDSA signatures from distinct keys in `(pk_ed_1, pk_ed_2, pk_ed_3)` sign the spend digest, and `Poseidon3(pk_ed_1, pk_ed_2, pk_ed_3) == note.quorum_hash`.
+2. **State & Clean Association Set:** The spent note exists in state root $R$ and its deposit commitment belongs to the approved **Clean Association Set ($ASP_{root}$)**.
+3. **Gateway Registry Inclusion:** `pk_gateway_epoch` belongs to the active on-chain Gateway Registry root $G_{root}$ for the current valid epoch.
+4. **Dual-Encryption Equivalence:** $C_{rec}$ and $C_{comp}$ encrypt the exact same $(\text{asset\_id}, \text{amount}, \text{rho})$ under $pk_{view\_rec}$ and $pk_{gateway\_epoch}$ respectively.
+5. **Nullifier & Value Conservation:** Nullifier is validly derived and $\sum \text{inputs} = \sum \text{outputs} + \text{relayer\_fee}$.
 
 ```
 Public Inputs:
-├── Merkle Root (R)
-├── Nullifier
-├── Ciphertext_Recipient
-├── Ciphertext_Compliance
-└── Compliance Gateway Public Key (pk_compliance)
+├── State Merkle Root (R)           [Checked against 4,096-root ring buffer]
+├── Clean Association Set (ASP_root)[Checked against 256-root ring buffer]
+├── Gateway Registry Root (G_root)  [Hides which gateway/epoch was used!]
+├── Nullifier(s) & Output Commitment(s)
+├── Ephemeral Public Key (R_eph)
+├── Ciphertext_Recipient (C_rec) & Ciphertext_Compliance (C_comp)
+└── Public Withdrawal Digest (amount, recipient, fee — 0 for internal shielded transfers)
 
 Private Inputs:
-├── Note details (asset_id, amount, rho, r)
-├── sk_spend
-├── Merkle Path & Index
-└── Blinding factors for ElGamal encryptions
+├── Note details (asset_id, amount, rho, r, quorum_hash)
+├── Quorum Public Keys (pk_ed_1, pk_ed_2, pk_ed_3) + 2 EdDSA Signatures (sig_a, sig_b)
+├── sk_nullifier & Merkle Path / ASP Path
+├── pk_gateway_epoch + Gateway Merkle Path in G_root
+└── Ephemeral scalar k_eph
 ```
 
 ### 4.4 The "ReadOnly" Auditor Interface (0/3 Signing Power)
-1. **Profile Export:** The enterprise exports a JSON payload containing $sk_{view}$ and the gateway attestation identifier.
+1. **Profile Export:** The enterprise exports a JSON payload containing $sk_{view}$ (never $sk_{ed,i}$ and never $sk_{nullifier}$) and the gateway attestation identifier.
 2. **Auditor Client:** The auditor (PwC, internal compliance, tax inspector) loads this profile into an **Auditor-Mode Vultisig Desktop/Web Client**.
-3. **Deterministic Decryption:** The auditor client scans the on-chain event logs of the shielded contract:
-   $$\text{For each } C_{rec} \text{ in BlockRange: Attempt Decrypt with } sk_{view}$$
-4. **Instant Audit Report:** Successfully decrypted notes reconstruct the full transaction journal:
-   * Timestamp, counterparty public identifier, exact USDC amount, invoice reference memo.
-   * **Security Guarantee:** $sk_{view}$ is mathematically incapable of generating nullifiers or computing threshold DKLS signatures. The auditor has **read-only access**. Even if the auditor’s machine is seized or compromised, treasury funds remain completely unspendable.
+3. **Deterministic Decryption:** The auditor client performs ECDH with each event's $R_{eph}$ and decrypts matching $C_{rec}$ payloads:
+   $$K_{rec} = \text{Poseidon2}(sk_{view} \cdot R_{eph}), \quad \text{Decrypt}(K_{rec}, C_{rec})$$
+4. **Instant Audit Report:** Successfully decrypted notes reconstruct the full incoming/outgoing invoice journal (timestamp, counterparty identifier, exact USDC amount, invoice memo).
+   * **Security Guarantee:** $sk_{view}$ cannot generate nullifiers and cannot produce the 2-of-3 BabyJubJub EdDSA signatures required by the circuit. Even total compromise of the auditor's machine leaves treasury funds 100% unspendable.
 
-### 4.5 Own-Pool Fork Economics, Dynamic Batching & $VULT Node Operations
-Integrating directly with an external third-party Railgun deployment imposes a hardcoded **0.25% shield + 0.25% unshield** protocol tax plus third-party broadcaster markups, destroying B2B unit economics. Conversely, deploying an isolated B2B-only fork creates a sparse, easily correlated anonymity set. Vultisig resolves both constraints with an **independent MIT-licensed fork** combined with three simple protocol rules:
+### 4.5 Own-Pool Fork Economics, Amount-Leak Prevention & Mobile Proving
+Integrating directly with an external third-party Railgun deployment imposes a hardcoded **0.25% shield + 0.25% unshield** protocol tax plus third-party broadcaster markups, while upstream audits do not cover custom dual-encryption or 2-of-3 EdDSA circuits. Vultisig addresses both security and unit economics with four strict engineering rules:
 
-1. **Zero External Protocol Tax:** Forking audited MIT contracts (`railgun-privacy/contract` / `0xbow-io/privacy-pools`) removes external DAO taxes completely; 100% of the `0.15%–0.20%` settlement fee remains inside the Vultisig / `$VULT` node ecosystem.
-2. **Dynamic Threshold Batching ("Shuttle" Queue — Zero Locked Corporate Capital):** Companies do not need to park working capital in the pool for weeks. Node relayers hold outgoing withdrawal intents in a dynamic queue that dispatches immediately once `K` independent transfers accumulate (e.g., every 5–15 minutes at peak flow) or at a maximum timeout (e.g., 4–12 hours), breaking block-by-block timing correlation.
-3. **Overlapping Payout Corridors (`$500–$5,000`):** Staff payrolls, contractor invoices, and neobank/card top-ups naturally cluster in the `$500–$5,000` range. Larger treasury settlements are automatically chunked by the client SDK into standard denominations across batch windows so corporate transfers blend seamlessly into verified retail volume.
-4. **Three Concrete Day-1 Roles for Bonded `$VULT` Nodes:**
-   * **AML & Attestation Gatekeepers:** Verify EAS credentials, Fiat24 NFTs, and AML risk scores prior to relaying; penalized via bond slashing if sanctioned/toxic addresses are admitted.
-   * **Gas Sponsors & Batch Relayers:** Pay negligible Base/Arbitrum L2 gas on behalf of retail cover users and payroll recipients (deducted in USDC / funded by B2B fees), coordinating dynamic batch dispatch.
-   * **Association Set Maintainers (ASP):** Quorum-sign periodic updates to the on-chain Clean Association Set Merkle root, isolating any post-hoc compromised deposits so honest enterprises retain spotless CEX/banking compliance scores.
+1. **Clean-Room Fork + Independent Circuit Audit:** Fork MIT-licensed `0xbow-io/privacy-pools` / `railgun-privacy/contract` foundations (`0%` external DAO tax; `0.15%–0.20%` stays in the Vultisig / `$VULT` ecosystem). Because adding 2-of-3 EdDSA + hidden gateway verification modifies the Circom/Noir circuits, **Mainnet launch explicitly gates on a dedicated circuit + contract audit and a Phase-2 Trusted Setup ceremony (or migrating to Noir/UltraHonk to eliminate circuit-specific trusted setups)**.
+2. **Native Mobile Proving (No SnarkJS in WebView):** Generating ~60k–90k constraint proofs in `snarkjs`/JS on budget Android phones in LatAm/Africa takes 15–30+ seconds and risks OOM crashes. Production mobile SDKs bundle **native C++/Rust `rapidsnark` (or Noir Barretenberg)** bindings alongside `@vultisig/lib-dkls`, targeting `< 2–3s` client proving times.
+3. **Two-Mode Payouts (Eliminating Odd-Amount Unshield Fingerprints):**
+   * *Internal Shielded Payroll (Zero Amount Leakage):* Exact odd amounts (e.g., `$3,420.50`) transfer **shielded-to-shielded** inside the pool (`Note_Company -> Note_Employee`). No amount ever touches public L2 calldata.
+   * *Public EOA Unshields (Strict Denomination Quantization):* Whenever funds exit the pool to a public address, the SDK enforces **fixed quantized denominations** (`$100`, `$500`, `$1,000`, `$5,000`) dispatched across **randomized cross-window jitter** inside the "Shuttle" queue—never dumping `$1,000 + $1,000 + $1,000 + $420.50` in the same batch. Any odd remainder stays inside the corporate shielded note as internal change.
+4. **Separation of Duties for Permissionless `$VULT` Nodes vs Independent ASPs:**
+   * **Permissionless `$VULT` Relayer Nodes (Anyone Can Operate):** Verify public ASP inclusion proofs, sponsor L2 gas for retail cover and payroll recipients, and run the dynamic "Shuttle" batch queue under deterministic Timeout Proof slashing.
+   * **Independent Accredited ASPs (Non-Node Governance):** Licensed compliance entities—never Vultisig Labs and never anonymous gas relayers—sign periodic updates to `ASP_root` and `G_root`, isolating tainted deposits while shielding relayer operators from discretionary AML/MSB liability.
 
 ---
 
@@ -287,62 +297,79 @@ The user holds only stablecoins (e.g., Base.USDC). They never buy ETH for gas:
 * The neobank sponsors the negligible L2 gas fee ($0.001 on Base) or automatically deducts a $0.05 fee directly in USDC.
 * **UX Result:** The user opens the app, enters "Send $20 to Maria", confirms with FaceID, and the transfer settles in 1 second.
 
+### 5.4 WaaS Monetization & Commercial Packaging (Day-1 Revenue Engine)
+Unlike ZK-Shielded Pools—which require external circuit audits and initial $k$-anonymity liquidity before generating meaningful fee volume—**Neobank WaaS leverages Vultisig’s existing production DKLS stack** and monetizes immediately through three high-margin layers:
+
+| Revenue Stream | Pricing Structure | Example Partner Economics (50k MAU Neobank) |
+| :--- | :--- | :--- |
+| **1. White-Label Platform SaaS** | `$2,000 – $5,000 / month` base license + SLA | `$3,000 / mo` recurring baseline |
+| **2. Active Wallet Usage (MAU)** | `$0.10 – $0.20 / active user / month` above 10k free tier | `(50k - 10k) × $0.15 = $6,000 / mo` |
+| **3. Embedded Swap / Bridge / Yield** | **`0.25% – 0.40%` (25–40 bps)** router fee on in-app FX, token swaps & cross-chain USDC | `$15M/mo swap volume × 0.30% = $45,000 / mo` |
+
+* **Why Fintechs Pay Happily:** Regional neobanks charge end-users `1%–2%` on FX/remittances vs legacy `5%–9%` wire fees. Paying Vultisig `$9k/mo` SaaS + `30 bps` on swaps is a fraction of building and auditing an in-house MPC infrastructure (`$500k+` and 12+ months).
+* **The Flywheel Effect:** Every onboarded neobank and card program solves two problems at once—generating high-margin USDC revenue in Phase 1 **and** supplying the high-frequency, KYC-attested retail transactions that power `k ≥ 40–80` anonymity when the ZK-Pool launches in Phase 2.
+
 ---
 
-## 6. The $VULT Tokenomics Engine: Multi-Sided Supply Squeeze
+## 6. Dual-Engine Business Model & $VULT Tokenomics
 
-The protocol converts enterprise privacy and B2B transaction volume into structural demand for the native $VULT token.
+Vultisig avoids the classic Web3 mistake of forcing corporate CFOs to buy volatile tokens or relying solely on one slow-ramping fee stream. Instead, **both** commercial engines (**Neobank WaaS** and **B2B Privacy Pool**) settle in pure USDC and feed value into `$VULT`.
 
 ```
-                           ┌───────────────────────────┐
-                           │   ENTERPRISE ONBOARDING   │
-                           └─────────────┬─────────────┘
-                                         │
-                         (Lock 50k-100k $VULT for Tiers)
-                                         │
-                                         ▼
-┌───────────────────────────┐      ┌───────────┐      ┌───────────────────────────┐
-│     NODE OPERATORS        │─────▶│   $VULT   │◀─────│      UNISWAP V3 POOL      │
-│  (100k $VULT Bond/Node)   │      │   TOKEN   │      │  (Illiquid Supply Squeeze)│
-└───────────────────────────┘      └─────┬─────┘      └───────────────────────────┘
-                                         │
-                            (Real Yield in Pure USDC)
-                                         │
-                                         ▼
-                           ┌───────────────────────────┐
-                           │   SUSTAINABLE REAL YIELD  │
-                           └───────────────────────────┘
+  [ ENGINE A: NEOBANK WaaS ]               [ ENGINE B: B2B ZK-POOL ]
+  • SaaS + MAU ($3k–$15k/partner)          • 0.25% Shielded Settlement (USDC)
+  • 0.25%–0.40% Embedded Swaps             • ERP / Audit Export Add-on
+               │                                        │
+               │                        ┌───────────────┴───────────────┐
+               │                        ▼ (60% = 15 bps)                ▼ (40% = 10 bps)
+               │              [ PERMISSIONLESS NODES ]      [ PROTOCOL TREASURY & ]
+               │              • Anyone can bond 100k $VULT  [  BUYBACK ENGINE     ]
+               │              • Earns Pure USDC Yield                   │
+               │                (covers retail cover gas)               │
+               └────────────────────────┬───────────────────────────────┘
+                                        ▼
+                   [ PROGRAMMATIC OPEN-MARKET $VULT BUYBACK ]
+                 + [ OPTIONAL PSP/GATEWAY FEE-DISCOUNT LOCKS ]
 ```
 
-### 6.1 Bonded Privacy Nodes (Decentralized Relayer & ZK-Coprocessor Network)
-**Critical Architectural Boundary:** `$VULT` nodes **do NOT participate in the user's Keysign ceremony**. `Vultisigner` and local peer-to-peer devices remain completely untouched, keeping standard threshold signing as fast and lightweight as today.
+### 6.1 Permissionless Privacy Nodes & Clean 60/40 Fee Split
+**Critical Architectural Boundary:** `$VULT` nodes **do NOT participate in the user's Keysign ceremony**. `Vultisigner` and local peer-to-peer devices remain completely untouched.
 
-Instead, operators run lightweight nodes functioning strictly as a **Decentralized Privacy Relayer & ZK-Coprocessor Network**:
+Instead, **anyone** can run a permissionless lightweight node functioning strictly as a **Stateless Privacy Relayer & Batcher**:
 * **Why Relayers Are Mandatory:** In any ZK privacy protocol, a user cannot broadcast a private withdrawal from their public wallet without paying ETH gas from a known address—instantly ruining privacy. A third-party relayer must submit the ZK-proof and pay L2 gas.
-* **Bond Requirement:** **100,000 `$VULT`** locked in an on-chain registry contract on Arbitrum/Base to become eligible for profitable B2B relayer jobs routed by Vultisig clients (preventing Sybil attacks and censorship).
+* **Permissionless Bond Requirement:** Anyone can bond **100,000 `$VULT`** in an on-chain registry contract on Arbitrum/Base to become eligible for B2B relayer jobs routed by Vultisig clients (preventing Sybil attacks and censorship without gatekeeping operators).
 * **Deterministic On-Chain Slashing (Timeout Proof):** Slashing is enforced entirely by the registry smart contract, not off-chain arbitration:
   1. When a node accepts a relayer job commitment, the contract starts a strict block-window countdown.
   2. If the node drops the job, stalls beyond the deadline, or attempts MEV reordering/front-running, the user's client submits an on-chain **Timeout Proof**.
-  3. The registry contract automatically **jails** the node (locking its bond for **7–14 days** with zero fee allocation) and **burns a slashing penalty** (`1%` for timeout/downtime; up to `10%` for invalid state or toxic-address admission).
-* **Real Yield Mechanism:** Enterprises pay relayers directly in USDC (`0.15%–0.25%` deducted inside the shielded note); **50%–100%** of net relayer/protocol fees (after negligible Base L2 gas and retail cover subsidies) accrue to active bonded node operators in pure USDC.
+  3. The registry contract automatically **jails** the node (locking its bond for **7–14 days** with zero fee allocation) and **burns a slashing penalty** (`1%` for timeout/downtime; up to `10%` for invalid state submission). Nodes do not maintain ASP lists and bear zero discretionary sanctions-curation liability.
+* **Transparent 60 / 40 Revenue Split (Base `0.25%` Shielded Fee in USDC):**
+  * **60% (`0.15%`) → Permissionless Relayer Nodes (USDC Real Yield):** Paid directly to the executing node (net of negligible Base L2 gas and a tiny pooled `~$0.005–$0.01/tx` retail cover gas subsidy).
+  * **40% (`0.10%`) → Protocol Treasury & `$VULT` Buyback Engine:** Funds ongoing protocol operations, security maintenance, and programmatic open-market `$VULT` buybacks.
 
-### 6.2 Enterprise Fee-Reduction Locks
-B2B volume follows a strict fee schedule designed to incentivize token locking without forcing corporate CFOs to hold volatile assets if restricted by treasury policy:
-* **Standard Tier (Zero Lock):** 1.00% protocol fee per shielded settlement (or flat `0.20%–0.25%` USDC pass-through via accredited partner gateways that stake `$VULT` on behalf of their B2B client base).
-* **Tier 1 (Lock 50,000 $VULT):** 0.50% protocol fee per shielded settlement.
-* **Tier 2 (Lock 100,000 $VULT):** 0.20% protocol fee + Dedicated Compliance Dashboard & Priority Routing.
-* **Zero-Balance-Sheet Friction:** Enterprises preferring pure stablecoin accounting pay flat USDC fees directly; automated fee-to-`$VULT` buybacks and partner gateway locks absorb token supply under the hood.
+### 6.2 Optional Fee-Discount Locks (Zero Mandatory Corporate Buying)
+Corporations are **never required** to buy or hold `$VULT` on their balance sheet. Pure USDC billing is the default; locking `$VULT` is strictly an **optional optimization** primarily suited for high-volume PSPs, OTC desks, WaaS partners, and accredited gateways:
+* **Default Enterprise Rate (Zero Lock):** Flat **`0.25%`** USDC settlement fee (zero token exposure, pure stablecoin invoicing).
+* **Optional Tier 1 (Lock 50,000 $VULT):** Reduced **`0.18%`** fee tier (primarily economical once monthly volume exceeds `~$7M/mo` or aggregated across a gateway/PSP).
+* **Optional Tier 2 (Lock 100,000 $VULT):** Lowest **`0.12%`** fee tier + priority Shuttle routing & WaaS swap-share rebate.
+* **Optional Add-On (Enterprise Compliance Suite):** `$500 – $1,500 / month` for automated QuickBooks/Xero/NetSuite ReadOnly audit log connectors.
 
-### 6.3 Mathematical Supply Squeeze Model
-Assume conservative mid-term adoption:
-* **Active Corporate Clients:** 250 enterprises (averaging $200k/month in payroll and vendor disbursements).
-* **Active Network Nodes:** 200 nodes securing the decentralized relay network.
+### 6.3 Realistic Revenue & Token Sink Scenarios (Dual-Engine Math)
+Rather than assuming every corporate client buys and locks `$VULT`, token demand is anchored in **permissionless node operators chasing real USDC yield**, **optional partner/PSP locks**, and **programmatic buybacks** funded by *both* WaaS and ZK-Pool USDC revenue (allocating e.g. **25% of protocol net revenue** to programmatic `$VULT` buybacks):
 
-$$\text{Tokens Locked by Enterprises} = 250 \times 50{,}000 = 12{,}500{,}000 \text{ \$VULT}$$
-$$\text{Tokens Locked by Nodes} = 200 \times 100{,}000 = 20{,}000{,}000 \text{ \$VULT}$$
-$$\text{Total Circulating Supply Removed} = 32{,}500{,}000 \text{ \$VULT } \mathbf{(32.5\% \text{ of Total 100M Cap})}$$
+| Metric | Conservative (Month 9) | Base Case (Month 15) | Scale Case (Month 24) |
+| :--- | :--- | :--- | :--- |
+| **Active WaaS Fintechs / Neobanks** | 4 partners (`80k` MAU) | 12 partners (`300k` MAU) | 30 partners (`1M` MAU) |
+| **WaaS Monthly Swap/Bridge Volume** | `$20M / mo` (`0.30%`) | `$75M / mo` (`0.30%`) | `$250M / mo` (`0.25%`) |
+| **WaaS Monthly Revenue (SaaS + MAU + Swaps)** | **`$75,000 / mo`** | **`$290,000 / mo`** | **`$825,000 / mo`** |
+| **B2B ZK-Pool Monthly Volume** | `$15M / mo` (`0.25%`) | `$60M / mo` (`0.25%`) | `$200M / mo` (`0.20%`) |
+| **ZK-Pool Gross Fees (60% Nodes / 40% Protocol)** | `$37.5k` (`$22.5k` / `$15k`) | `$150k` (`$90k` / `$60k`) | `$400k` (`$240k` / `$160k`) |
+| **Total Protocol Net Revenue (WaaS + 40% ZK)** | **`$90,000 / mo`** | **`$350,000 / mo`** | **`$985,000 / mo`** |
+| **Annualized `$VULT` Buyback Pressure (25% Share)** | **`$270,000 / yr`** | **`$1,050,000 / yr`** | **`$2,955,000 / yr`** |
+| **Permissionless Nodes (`100k $VULT` each)** | 50 nodes (`5.0M $VULT`) | 120 nodes (`12.0M $VULT`) | 220 nodes (`22.0M $VULT`) |
+| **Optional Partner/Gateway Locks (`50k–100k`)** | 10 partners (`0.75M $VULT`) | 25 partners (`2.0M $VULT`) | 60 partners (`5.0M $VULT`) |
+| **Total Supply Locked (% of 100M Cap)** | **`5.75M (5.75%)`** | **`14.0M (14.0%)`** | **`27.0M (27.0%)`** |
 
-Because $VULT liquidity on Uniswap V3 is concentrated within narrow price bands, the programmatic withdrawal of 32.5% of total supply from the open market creates an inelastic supply curve, generating massive upward price reflexivity.
+**Key Economic Takeaway:** Even if **zero** traditional corporations buy `$VULT`, WaaS provides immediate `$75k–$290k/mo` cashflow early on, while permissionless relayer yields + optional partner locks + continuous USDC buybacks remove `14%–27%` of supply sustainably without synthetic emissions.
 
 ---
 
@@ -350,70 +377,58 @@ Because $VULT liquidity on Uniswap V3 is concentrated within narrow price bands,
 
 | Feature | Safe (Gnosis) | Fireblocks | MPCVault | Tornado Cash | **Vultisig Enterprise** |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Cryptographic Scheme** | Smart Contract Multi-Sig | MPC (Cloud Enclaves) | 3-of-3 MPC (Azure/GCP) | Single Private Key | **Decentralized DKLS TSS** |
-| **On-Chain Anonymity** | None (Public) | None (Public) | None (Public) | High (Tainted) | **High (Compliant ZK)** |
-| **Auditing Protocol** | Public Explorer | SaaS DB Logs | SaaS DB Logs | None (Mixer) | **Dual-Recipient ZK View-Keys** |
-| **Sanctions Screened** | Front-end only | Centralized API | Centralized API | None (Toxic) | **On-Chain Proof of Innocence** |
+| **Cryptographic Scheme** | Smart Contract Multi-Sig | MPC (Cloud Enclaves) | 3-of-3 MPC (Azure/GCP) | Single Private Key | **DKLS TSS + 2-of-3 ZK EdDSA** |
+| **On-Chain Anonymity** | None (Public) | None (Public) | None (Public) | High (Tainted) | **High (Compliant ZK, Hidden Gateway)** |
+| **Auditing Protocol** | Public Explorer | SaaS DB Logs | SaaS DB Logs | None (Mixer) | **ECDH+Poseidon Dual View-Keys** |
+| **Sanctions Screened** | Front-end only | Centralized API | Centralized API | None (Toxic) | **Independent ASP Proof of Innocence** |
 | **Regulatory Status** | Neutral | Heavy Licensee | Heavy Licensee | Sanctioned / OFAC | **Exempt Non-Custodial Software** |
-| **Cross-Chain Breadth** | EVM Only | Multi-Chain | Multi-Chain | EVM Only | **Native Multi-Chain (BTC, SOL, EVM)** |
+| **Cross-Chain Breadth** | EVM Only | Multi-Chain | Multi-Chain | EVM Only | **WaaS: BTC/SOL/EVM; ZK-Pool: EVM L2** |
 | **Turnkey Neobank WaaS** | No (Too complex) | Enterprise Only | Enterprise Only | No | **Native FastVault 2-of-3 SDK** |
 
 ---
 
-## 8. Capital Efficiency, Open-Source Map & $70k Bootstrapped Runway
+## 8. Realistic Cost Structure, Open-Source Map & Phased Budget Breakdown
 
-A fundamental misconception among blockchain executives is that implementing ZK-Shielded Pools requires millions of dollars in R&D. In reality, **over 85% of the complex cryptographic code is already battle-tested and open-source on GitHub**.
+A realistic engineering view is critical here: while **~75–85% of foundational primitives** (Merkle trees, Poseidon, EdDSA verifiers, EAS, DKLS) exist in audited MIT/Apache repositories, **modifying circuits to add 2-of-3 EdDSA + hidden gateway inclusion + dual ECDH encryption invalidates upstream circuit audits**. Building a production-grade WaaS platform alongside audited ZK-privacy infrastructure takes **12–14 months** and **`$565,000 – $810,000`** in gross capital (with Phase 1 WaaS revenue and L2 ecosystem grants offsetting a substantial share of Phase 2–3 costs).
 
 ### 8.1 Open-Source Cryptographic Asset Map
 
 | Functional Layer | Battle-Tested Open-Source Repository | License | Implementation Role |
 | :--- | :--- | :--- | :--- |
-| **Shielded Pool Smart Contracts** | [railgun-privacy/contract](https://github.com/railgun-privacy/contract) | MIT | Audited EVM contracts (Trail of Bits, ABDK) managing Merkle trees, nullifiers, and token vaults. |
-| **Proof of Innocence Circuits** | [ameensol/privacy-pools](https://github.com/ameensol/privacy-pools) & [0xbow-io](https://github.com/0xbow-io) | MIT | Circom circuits proving membership in clean association sets (Vitalik's paper). |
-| **ZK Math & Primitives** | [iden3/circomlib](https://github.com/iden3/circomlib) & [snarkjs](https://github.com/iden3/snarkjs) | GPL-3.0 / MIT | Poseidon hash, BabyJubJub curve operations, and client-side proof generation. |
-| **On-Chain Attestations** | [ethereum-attestation-service/eas-contracts](https://github.com/ethereum-attestation-service/eas-contracts) | MIT | Standardized contract infrastructure for licensed gateway KYB passes. |
-| **Threshold Core (TSS)** | [vultisig/lib-dkls](https://github.com/vultisig/lib-dkls) & [@vultisig/sdk](https://github.com/vultisig/vultisig-windows) | Apache-2.0 | Vultisig's existing WASM-compiled DKLS23 engine. |
+| **Shielded Pool Smart Contracts** | [railgun-privacy/contract](https://github.com/railgun-privacy/contract) & [0xbow-io/privacy-pools](https://github.com/0xbow-io) | MIT | Base EVM contracts for Merkle trees (expanded to 4,096-root ring buffer), nullifiers, and ASP root registries. |
+| **ZK Circuits & Mobile Prover** | [iden3/circomlib](https://github.com/iden3/circomlib) + [iden3/rapidsnark](https://github.com/iden3/rapidsnark) (or Noir/UltraHonk) | GPL-3.0 / MIT | Audited `EdDSAPoseidonVerifier`, BabyJubJub ECDH, Poseidon sponge AEAD, and native C++/ARM proving (`<3s` on mobile). |
+| **On-Chain Attestations** | [ethereum-attestation-service/eas-contracts](https://github.com/ethereum-attestation-service/eas-contracts) | MIT | Standardized contract infrastructure for licensed gateway KYB passes and epoch key registries. |
+| **Threshold Core (TSS)** | [vultisig/lib-dkls](https://github.com/vultisig/lib-dkls) & [@vultisig/sdk](https://github.com/vultisig/vultisig-windows) | Apache-2.0 | Vultisig's existing WASM/native DKLS23 engine + P2P WebRTC quorum coordination. |
 
-### 8.2 The Phased $70k Bootstrapped Self-Funding Model
+### 8.2 Detailed Phase-by-Phase Budget & Cost Breakdown
 
-Vultisig currently possesses approximately **$70,000 in liquid operational treasury**. This is more than sufficient to execute a high-impact **Phase 1 Testnet Spike**, creating the market momentum required to self-fund subsequent phases.
+#### Phase 1 (Months 1–4): Commercial WaaS Production SDK + ZK-Core Testnet MVP — **`$165,000 – $205,000`**
+| Line Item | Scope & Market Assumptions | Cost Range |
+| :--- | :--- | :--- |
+| **Senior ZK / Solidity Engineer** | 4 months × `$14k–$16k/mo` (2-of-3 EdDSA + ECDH/Poseidon circuits, 4,096-root pool fork) | `$56,000 – $64,000` |
+| **Senior MPC / Mobile SDK Engineer** | 4 months × `$12k–$14k/mo` (`@vultisig/waas-sdk`, FastVault Share-2 HSM worker, Key Resharing) | `$48,000 – $56,000` |
+| **Full-Stack / Relayer / DevOps Engineer** | 4 months × `$9k–$11k/mo` (ERC-4337 Paymaster, 30 bps Swap Router, Shuttle Testnet relayer) | `$36,000 – $44,000` |
+| **WaaS Paymaster / Contract Review** | Focused security review of ERC-4337 Paymaster & WaaS swap router contracts | `$12,000 – $22,000` |
+| **Infrastructure & Tooling** | Dedicated Base/Arbitrum RPCs, cloud HSM/KMS enclaves, CI/CD, iOS/Android test devices | `$13,000 – $19,000` |
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                       PHASE 1: THE $70K TESTNET SPIKE                       │
-│  - Duration: 3 Months                                                       │
-│  - Team: 2 Senior Engineers (1 ZK/EVM Specialist + 1 Full-Stack/Vultisig)   │
-│  - Development Acceleration: Modern AI tools (Cursor, Claude 3.5 Sonnet)    │
-│    accelerate integration, test coverage, and SDK bindings by 3.5x.         │
-│  - Budget Breakdown:                                                        │
-│    • 2 Engineers x $10,000/mo x 3 months = $60,000                          │
-│    • Testnet infrastructure, RPCs, and developer tooling = $10,000          │
-│    • TOTAL: $70,000                                                         │
-│  - Output: Working Testnet MVP on Base Sepolia (Deposit -> Shield -> Audit) │
-└──────────────────────────────────────┬──────────────────────────────────────┘
-                                       │
-                      [ Market Announcement & Momentum ]
-                                       │
-                                       ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                 PHASE 2: SELF-FUNDING VIA PROTOCOL EXPANSION                 │
-│  - Catalyst: Testnet Launch & Strategic B2B announcement.                   │
-│  - Treasury Inflows:                                                        │
-│    • Volume surge in wallet swap fees (yielding increased buyback pool).    │
-│    • L2 Ecosystem Grants (Arbitrum Foundation Grants, Base Builder Grants).  │
-│    • Strategic Pre-Locks by initial enterprise design partners.              │
-│  - Budget Allocation ($120k–$150k from protocol earnings):                  │
-│    • Professional Smart Contract & Circuit Audit (e.g., ABDK, Halborn).     │
-│    • Release of @vultisig/waas-sdk for Neobank pilot partners.              │
-└──────────────────────────────────────┬──────────────────────────────────────┘
-                                       │
-                                       ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                 PHASE 3: MAINNET TOKENOMICS & NODE BOND ACTIVATION          │
-│  - Funded entirely by incoming enterprise fees and 100k $VULT node bonds.   │
-│  - Zero treasury depletion; perpetual self-sustaining real yield in USDC.   │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
+#### Phase 2 (Months 5–9): Independent ZK Audits, Cover-Flow Integration & Mainnet B2B Launch — **`$285,000 – $440,000`**
+| Line Item | Scope & Market Assumptions | Cost Range |
+| :--- | :--- | :--- |
+| **Custom ZK Circuit & Pool Audit** | Top-tier / specialized ZK firm (Veridise, zkSecurity, ABDK, Trail of Bits); 8–12 weeks incl. queue | `$120,000 – $220,000` |
+| **Ceremony + Initial Bug Bounty** | Phase-2 Trusted Setup ceremony (`$20k–$35k`, **$0 if Noir/UltraHonk**) + Immunefi launch reserve | `$30,000 – $60,000` |
+| **Engineering Remediation & Mobile Prover** | 5 months (audit fixes, native `rapidsnark` / Noir mobile bindings, Auditor Desktop UI, ASP/Gateway APIs) | `$120,000 – $140,000` |
+| **Legal & Gateway Structuring** | Non-custodial legal opinion (US/EU) + standard commercial agreements with 2–3 licensed gateways/ASPs | `$15,000 – $20,000` |
+
+#### Phase 3 (Months 10–14): Permissionless `$VULT` Relayer Network & Dual-Engine Tokenomics — **`$115,000 – $165,000`**
+| Line Item | Scope & Market Assumptions | Cost Range |
+| :--- | :--- | :--- |
+| **Staking & Slashing Contract Audit** | Audit of 100k `$VULT` registry, Timeout Proof slashing, 60/40 USDC splitter & buyback router | `$35,000 – $55,000` |
+| **Relayer Daemon & Tokenomics Dev** | 4 months (Go/Rust stateless relayer daemon, slashing watcher, optional fee-tier contracts, monitoring) | `$70,000 – $95,000` |
+| **Node Testnet Incentives & Ops** | Incentivized testnet for external relayer operators + telemetry/alerting infrastructure | `$10,000 – $15,000` |
+
+#### Summary Capital Plan (14-Month Total)
+* **Gross Total (Phases 1–3):** **`$565,000 – $810,000`** across 12–14 months.
+* **Net External Capital Needed:** Because WaaS begins onboarding paying fintechs from Month 4–5 (`$50k–$150k+/mo` potential as pilots scale) alongside Base/Arbitrum builder grants (`$75k–$200k`), Phase 1 requires committed upfront capital (`~$185k`), while Phase 2–3 are co-funded by WaaS cashflow and ecosystem grants.
 
 ---
 
@@ -469,43 +484,37 @@ Beyond financial transactions, global institutions face catastrophic liabilities
 
 ---
 
-## 10. Concrete Engineering Implementation Roadmap
+## 10. Detailed Launch Sequence & 14-Month Engineering Roadmap
 
 ```
-PHASE 1: Core ZK-Module, Key Derivation & Testnet MVP (Months 1–3) [$70k Budget]
-├── [Validation] Secure 3 Design Partner LOIs across Payroll, PSP/OTC & Card/Neobank verticals.
-├── [Core] Integrate BabyJubJub curve & Poseidon hash into @vultisig/lib-dkls (WASM).
-├── [DKLS] Implement vault-bound zk_seed persistence (.vult) & Threshold DH (OPRF) -> (sk_spend, sk_view).
-├── [Contracts] Fork audited MIT shielded contracts (0% external fee) + EAS/AML gatekeeper on Base Sepolia.
-├── [Relayer] Ship dynamic batching ("Shuttle") relayer with gasless verified-retail cover routing.
-├── [Client] Build "Export Audit Package" & "Auditor View-Only Mode" into Vultisig Desktop.
-└── [Milestone] Live Testnet Demo & Public Strategic Announcement.
+PHASE 1: Commercial WaaS Production + ZK-Core Testnet (Months 1–4) [$165k–$205k]
+├── [M1–M2 | WaaS Core] Package @vultisig/waas-sdk (iOS/Android), FastVault Share-2 K8s/HSM worker & Key Resharing.
+├── [M2–M3 | WaaS Money] Integrate ERC-4337 Paymaster (USDC gas) + 30 bps Swap/Bridge router; run Paymaster security review.
+├── [M3–M4 | Pilots] Sign & integrate 2–3 neobank/card fintech design partners (generating first SaaS + swap revenue).
+├── [M1–M3 | ZK Quorum] Implement per-device BabyJubJub EdDSA + in-circuit 2-of-3 EdDSAPoseidonVerifier + separate sk_view/sk_nullifier.
+├── [M2–M4 | ZK Circuits] Build ECDH+Poseidon Dual-Recipient circuit with PRIVATE G_root Gateway verification (epoch rotation).
+└── [M3–M4 | Testnet] Fork MIT pool contracts on Base Sepolia (4,096-root ring buffer + quantized unshields) + Shuttle Testnet relayer.
 
-PHASE 2: Audits, Compliance Gateways & Neobank WaaS SDK (Months 4–6) [Self-Funded]
-├── [Security] Contract third-party audit (ABDK / Trail of Bits / Halborn) funded via grants/fees.
-├── [Circuits] Deploy Dual-Recipient Encryption & Association Set (Proof of Innocence) circuits.
-├── [Contracts] Integrate Coinbase Verifications, Fiat24 NFT & regional Gateway EAS verifiers.
-├── [WaaS] Package @vultisig/waas-sdk for iOS/Android (Biometric Secure Enclave + FastVault).
-└── [Pilots] Onboard 3 licensed compliance partners (US/EU) & 3 B2B design partners / neobanks.
+PHASE 2: Independent ZK Audits, Cover-Flow Integration & B2B Mainnet (Months 5–9) [$285k–$440k]
+├── [M5 | Booking] Freeze ZK circuit/contract specs & lock 8–12 week audit slot (Veridise / ABDK / Trail of Bits / zkSecurity).
+├── [M5–M7 | Mobile Prover] Bundle native C++/Rust rapidsnark (or Noir UltraHonk) alongside @vultisig/lib-dkls (<3s proving) + Auditor UI.
+├── [M6–M8 | Compliance] Execute non-custodial legal opinion & integrate 2–3 licensed regional gateways/ASPs (ASP_root + G_root).
+├── [M7–M8 | Remediation] Resolve audit findings, run Phase-2 Trusted Setup (if Groth16) & launch Immunefi bug bounty reserve.
+└── [M9 | Mainnet Launch] Route attested WaaS/card retail traffic as gasless cover flow and launch Compliant B2B ZK-Pool Mainnet.
 
-PHASE 3: Node Network, Token Mechanics & Mainnet Launch (Months 7–9) [Node-Funded]
-├── [Staking] Deploy 100k $VULT Node Staking & Slashing contracts on Base/Arbitrum.
-├── [Relayers] Release lightweight Go/Rust daemon for AML screening, gas sponsoring & dynamic batching.
-├── [Tiers] Implement fee-tier deduction & partner gateway lock logic in USDC/VULT.
-└── [Revenue] Activate automated USDC Real Yield distribution & retail gas subsidy pool.
+PHASE 3: Permissionless $VULT Relayer Network & Dual-Engine Tokenomics (Months 10–14) [$115k–$165k]
+├── [M10–M11 | Contracts] Build 100k $VULT Relayer Registry, Timeout Proof Slashing, 60/40 USDC Splitter & optional fee-tier contracts.
+├── [M11–M12 | Audit & Daemon] Audit staking/slashing contracts & ship lightweight Go/Rust stateless relayer daemon + monitoring.
+├── [M12–M13 | Incentivized Net] Run permissionless relayer testnet & stress-test Shuttle batching + Timeout Proof jailing.
+└── [M14 | Full Flywheel] Activate Mainnet permissionless nodes, 60/40 USDC Real Yield, and 25% WaaS+ZK programmatic $VULT buybacks.
 ```
 
 ---
 
 ## 11. Conclusion: The Strategic Path Forward
 
-The Web3 market does not need another retail DEX aggregator or another basic crypto wallet. The retail market is saturated and low-margin. 
+The Web3 market does not need another retail DEX aggregator or another basic crypto wallet. The retail market is saturated and low-margin.
 
-By building the **first legal, compliant, B2B-ready privacy and WaaS framework**, Vultisig can solve the multi-trillion dollar commercial data leak problem, capture high-volume corporate payrolls, and transform the $VULT token from a speculative asset into a mission-critical infrastructure yield engine.
+By pairing an **immediately monetizable Neobank WaaS SDK** with the **first legal, compliant, B2B ZK-Privacy layer**, Vultisig solves both cold-start liquidity and early cashflow: WaaS launches first (Months 1–4) to generate recurring SaaS and swap revenue while building the verified retail cover traffic that makes B2B payroll privacy mathematically robust. Over a realistic **12–14 month roadmap (`$565k–$810k` gross, co-funded after Phase 1 by WaaS cashflow and L2 grants)**, permissionless relayer nodes, optional partner fee-discount locks, and programmatic USDC-to-`$VULT` buybacks align token value with real commercial volume—without forcing corporate CFOs to hold volatile tokens.
 
-The technical foundations exist:
-* The cryptographic blueprints are open-source and audited.
-* The team has the necessary $70,000 runway to deliver a working Phase 1 Testnet MVP.
-* The market narrative and subsequent fee revenue will organically fund the path to Mainnet.
-
-**Recommended Action for Core Leadership:** Authorize the Phase 1 90-day technical sprint: fork the open-source circuits, implement static vault-bound / Threshold-DH viewing-key derivation alongside `@vultisig/lib-dkls` (keeping Keysign untouched), and execute the first shielded corporate payroll on Base Sepolia.
+**Recommended Action for Core Leadership:** Fund Phase 1 (`$165k–$205k`, Months 1–4) to ship the commercial `@vultisig/waas-sdk` to paying fintech pilots while freezing the audited-path `2-of-3 EdDSA` + hidden-gateway ZK-Pool specs on Base Sepolia ahead of Phase 2 circuit audits.
