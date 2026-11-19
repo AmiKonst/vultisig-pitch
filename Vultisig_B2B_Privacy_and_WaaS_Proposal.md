@@ -1,10 +1,9 @@
 # Strategic Architecture & Technical Specification: Institutional Privacy & Wallet-as-a-Service (WaaS) for Vultisig
 
-**Document ID:** RFC-VULT-2024-01  
-**Authors:** Vultisig Strategic Architecture Initiative  
+**Authors:** TK
 **Target Audience:** Core Protocol Engineers, Cryptographers, Leadership, and Ecosystem Builders  
 **Status:** Comprehensive Technical Proposal & Phased Implementation Blueprint  
-**Date:** November 2024  
+**Date:** November 2026
 
 ---
 
@@ -14,12 +13,12 @@ Public blockchains suffer from an existential dilemma: **radical transparency em
 
 This document outlines a **production-ready, legally immune, and cryptographically verified architecture** designed specifically for Vultisig’s Threshold Signature Scheme (TSS / DKLS) stack:
 
-1. **Compliant B2B Privacy Layer:** Deploys ZK-Shielded Pools on high-throughput EVM Layer 2s (Arbitrum, Base). By deriving a deterministic, non-signing **"ReadOnly Share" (Viewing Key)** separately from a **2-of-3 Quorum Spend Circuit**, and utilizing **Zero-Knowledge Dual-Recipient Encryption** with hidden gateway keys, enterprises achieve commercial confidentiality against competitors while preserving automated auditability for tax authorities and accounting firms (PwC, Deloitte).
-2. **Absolute Regulatory Immunity for Vultisig (No Licensing Required):** Under FinCEN Guidance FIN-2019-G001 and EU MiCA Recital 22, unhosted wallet software developers are **not** Money Services Businesses (MSBs) or Crypto-Asset Service Providers (CASPs). KYB, Travel Rule reporting, and Clean Association Set (ASP) curation are offloaded entirely to regional accredited gateways and independent ASPs (the "DistroKid / Spotify" model). Vultisig remains 100% open-source, non-custodial middleware.
-3. **Turnkey Neobank WaaS (Wallet-as-a-Service — Immediate Revenue & Cover Engine):** Productizes Vultisig’s **FastVault (2-of-3 MPC)** across BTC, SOL, and EVM for regional fintechs in emerging markets (LatAm, Africa, SEA). Monetized from Day 1 via SaaS platform fees, active-wallet tiers, and embedded swap/bridge routing (`0.25%–0.40%`), WaaS generates immediate cashflow while seeding the verified retail flow required for ZK pool anonymity.
-4. **Dual-Engine $VULT Economics (No Mandatory Corporate Token Holding):** Anyone can run a stateless privacy relayer by bonding **100,000 $VULT** to earn 60% of ZK settlement fees in pure USDC. Meanwhile, WaaS swap revenue + the protocol's 40% ZK fee share drive programmatic **$VULT** buybacks—even when 100% of enterprises pay flat USDC. Token locking for fee discounts remains strictly optional for high-volume PSPs, gateways, or traders.
-5. **Realistic Phased Capital & Flywheel Execution (12–14 Months | ~$565k–$810k Gross):** Ships the commercial **WaaS SDK** and **ZK-Core Testnet** in Phase 1 (Months 1–4, `$165k–$205k`), funds dedicated ZK circuit audits and Mainnet B2B launch in Phase 2 (Months 5–9, `$285k–$440k`) via WaaS cashflow + L2 grants/treasury, and rolls out permissionless `$VULT` relayer nodes in Phase 3 (Months 10–14, `$115k–$165k`).
-6. **Future R&D Horizon (Post-Mainnet, Out of Phase 1–2 Scope):** Extends Vultisig’s MPC foundation beyond payments into **Anti-Deepfake Voice/Video Identity Verification** and **Threshold-Encrypted Enterprise Data Vaults**.
+1. **Stage-Gated Commercial Wedge — B2B SaaS + Turnkey Neobank WaaS + Clean Swaps (Phase 1, Zero ZK Wait):** Launches immediately on Vultisig’s **existing production DKLS / FastVault stack** across BTC, SOL, and EVM—requiring **no new key types, no 4-platform ZK provers, and no upfront ZK circuit audits**. Monetizes from Day 1 via B2B/WaaS SaaS licenses, MAU pricing, ERP audit exports, and clean swap/bridge routing (`0.25%–0.40%`), building active users, swap cashflow, and resting L2 liquidity before committing heavy ZK R&D capital.
+2. **Customer-Gated B2B Privacy Layer (Phase 2):** Unlocked strictly after Phase 1 validates commercial demand (`2–3` paying pilots / signed enterprise LOIs). Deploys audited ZK-Shielded Pools on Arbitrum and Base featuring a deterministic **"ReadOnly Share" (`sk_view`)**, **2-of-3 EdDSA Quorum Spend Circuit** (`pk_nullifier` bound inside `quorum_hash`), and **Zero-Knowledge Dual-Recipient Encryption** with hidden gateway keys (`G_root`), layered onto existing WaaS retail flow and resting USDC TVL.
+3. **Absolute Regulatory & Fee-Model Immunity (Zero `%` Withdrawal Toll):** Under FinCEN Guidance FIN-2019-G001 and EU MiCA Recital 22, Vultisig remains 100% open-source, non-custodial software while KYB, Travel Rule reporting, and Clean Association Set (`ASP_root`) curation sit with accredited gateways and independent ASPs. Crucially—to eliminate the *Samourai Wallet* coordinator-fee vector—**Vultisig charges `0%` on private deposits, transfers, or withdrawals**, monetizing strictly through B2B SaaS software licenses and standard swap routing.
+4. **Two-Stage $VULT Economics (Buybacks First → Permissionless Infrastructure Nodes at Scale):** In Stage 1, programmatic `$VULT` buybacks (`25%` of net SaaS + Swap USDC revenue) and optional swap/SaaS fee-discount locks drive token value with **zero** upfront node overhead. Once transaction volume reaches critical mass (Phase 3), anyone can bond **100,000 $VULT** to operate a **Decentralized FastVault Co-signer / ERC-4337 Paymaster & Stateless Shuttle Batcher**, earning pure USDC from **flat per-slot/gas spreads and Co-signer SLA fees** (never a `%` toll on shielded withdrawals).
+5. **Lean Stage-Gated Capital Plan (`$125k–$165k` Upfront | `$565k–$810k` Full 14-Month Stack):** Phase 1 ships the commercial WaaS/B2B SaaS & Swap stack in Months 1–4 for **`$125k–$165k`**. Only upon passing Stage-Gate #1 do WaaS cashflow and L2 grants co-fund Phase 2 ZK build + audits (Months 5–10, `$325k–$480k`) and Phase 3 permissionless `$VULT` infrastructure nodes (Months 11–14, `$115k–$165k`).
+6. **Future R&D Horizon (Post-Mainnet, Out of Phase 1–3 Budget Scope):** Extends Vultisig’s MPC foundation beyond payments into **Anti-Deepfake Voice/Video Identity Verification** and **Threshold-Encrypted Enterprise Data Vaults**.
 
 ---
 
@@ -47,9 +46,10 @@ To eliminate cold-start guesswork before production engineering, commercial vali
 2. **Regional Crypto PSPs, Acquirers & OTC Desks (e.g., CoinsPaid, Triple-A, B2BinPay, Bitso Business, Yellow Card class):** Cross-border commercial settlement desks leak supplier lists, procurement cadence, and pricing margins when transacting from public EOA/Safe addresses, yet require strict compliance for banking off-ramps.
 3. **Stablecoin Neobanks, Crypto Card Programs & Fund Treasuries (e.g., THORWallet/Fiat24, Kast, Gnosis Pay class & ecosystem funds):** Card/neobank programs need seedless 2-of-3 MPC security and feed continuous, chaotic retail card top-ups and transfers into the shared pool, while fund treasuries eliminate MEV/copy-trading front-running.
 
-#### Minimum Anonymity-Set Sizing (`k`-Anonymity Math)
-* **B2B-Only Pool (No Retail):** Reaching `k ≥ 20–30` independent transactions per window requires **40–60 active B2B companies** (1–2h windows) or **10–15 active companies** using 12–24h clearing windows. With only 1–3 early clients, a B2B-only pool remains vulnerable to timing/amount correlation.
-* **Hybrid Clean Flow (1–3 B2B Clients + Verified Retail Cover):** Adding **500–1,000 gasless verified retail/card transactions per day** generates `k ≥ 40–80` independent transactions per 2-hour batch window from Day 1. On Base, subsidizing 1,000 batched retail transactions costs **~$5–$10/day in L2 gas**, fully covered by a single `$50k–$100k` B2B payroll (`0.25%` base fee = `$125–$250`).
+#### Minimum Anonymity-Set Sizing, Resting TVL & Payday Decorrelation
+* **B2B-Only Pool (No Retail):** Reaching `k ≥ 20–30` independent transactions per window requires **40–60 active B2B companies** (1–2h windows) or **10–15 active companies** using 12–24h clearing windows. With only 1–3 early clients on an empty L2 pool, a B2B-only pool leaks both timing and pool-TVL spikes.
+* **Hybrid Clean Flow + Resting L2 Liquidity (Phase 1 Seeded):** Launching WaaS/B2B SaaS first means that by the time the ZK-Pool opens in Phase 2, **500–1,000+ daily verified retail/card transactions** and **multi-million resting WaaS/treasury USDC balances** already sit on Base/Arbitrum—producing `k ≥ 40–80` per 2-hour batch window while smoothing large corporate deposit spikes. Subsidizing 1,000 batched retail txs on Base costs **~$5–$10/day in L2 gas**, effortlessly covered by B2B SaaS subscriptions (`$500–$1,500/mo`) and flat batch relay fees (`~$1.00/slot`) with zero `%` tax on shielded withdrawals.
+* **Payday Temporal Decorrelation:** To defeat fixed-date (1st/15th) payroll correlation, WaaS-integrated payroll allows contributors to **hold and spend balances natively inside the shielded/card wallet** (e.g., Visa/Mastercard top-ups, P2P transfers, or swaps) rather than dumping 100% into public CEXs on payday, while any public EOA exits enforce randomized cross-window jitter and quantized denominations (`$100–$5,000`).
 
 ---
 
@@ -105,7 +105,7 @@ Instead of Vultisig attempting to secure SOC 2, MSB, or banking licenses in 150 
 To prevent an early B2B pool from becoming transparent without admitting unscreened illicit actors—and without turning Vultisig into a KYC bureau—the pool adopts the exact partner-delegated credential pattern proven in production by **THORWallet** (via **Fiat24** Account NFTs on Arbitrum and **Unblock** for Visa/Mastercard programs):
 1. **Reusable On-Chain KYC Attestations (Zero Clicks, Zero PII):** Millions of wallets on Base and Arbitrum already hold verifiable, non-transferable on-chain credentials issued by regulated entities (e.g., **Coinbase Verifications EAS**, **Fiat24 Account NFTs**, **Binance BAB**, or **Sumsub Reusable IDs**). Any wallet holding a whitelisted attestation can route transfers through the pool without uploading documents to Vultisig.
 2. **Independent ASP Exclusion Sets & Stateless Relayer Screening:** Independent, regulated **Association Set Providers (ASPs)**—separate from Vultisig Labs and separate from permissionless gas relayers—maintain the on-chain *Proof of Innocence* Merkle roots using sanctions/AML feeds (OFAC, Chainalysis Sanctions Oracle). Permissionless `$VULT` relayer nodes only perform stateless pre-submission checks against those public ASP roots and refuse tainted deposits, keeping nodes free of discretionary compliance/MSB liability.
-3. **Gasless Privacy Incentive & Unified Ciphertext Format:** Clean retail users receive **sponsored gasless private transfers** (`$0` ETH required for gas) funded out of B2B settlement fees. Crucially, retail cover transactions emit the **exact same circuit shape and hidden compliance ciphertext structure** (encrypted to a public/ASP epoch key in the shared Gateway Registry) so chain analytics cannot filter out retail cover traffic.
+3. **Gasless Privacy Incentive & Unified Ciphertext Format:** Clean retail users receive **sponsored gasless private transfers** (`$0` ETH required for gas) subsidized from B2B SaaS infrastructure budgets and flat batch-slot economics. Crucially, retail cover transactions emit the **exact same circuit shape and hidden compliance ciphertext structure** (encrypted to a public/ASP epoch key in the shared Gateway Registry) so chain analytics cannot filter out retail cover traffic.
 
 ---
 
@@ -241,13 +241,13 @@ Private Inputs:
 ### 4.5 Own-Pool Fork Economics, Amount-Leak Prevention & Mobile Proving
 Integrating directly with an external third-party Railgun deployment imposes a hardcoded **0.25% shield + 0.25% unshield** protocol tax plus third-party broadcaster markups, while upstream audits do not cover custom dual-encryption or 2-of-3 EdDSA circuits. Vultisig addresses both security and unit economics with four strict engineering rules:
 
-1. **Clean-Room Fork + Independent Circuit Audit:** Fork MIT-licensed `0xbow-io/privacy-pools` / `railgun-privacy/contract` foundations (`0%` external DAO tax; `0.12%–0.25%` across fee tiers—`0.25%` base split `60%` relayer nodes / `40%` protocol & buybacks—stays in the Vultisig / `$VULT` ecosystem). Because adding 2-of-3 EdDSA + hidden gateway verification modifies the Circom/Noir circuits, **Mainnet launch explicitly gates on a dedicated circuit + contract audit and a Phase-2 Trusted Setup ceremony (or migrating to Noir/UltraHonk to eliminate circuit-specific trusted setups)**.
-2. **Native Mobile Proving (No SnarkJS in WebView):** Generating ~60k–90k constraint proofs in `snarkjs`/JS on budget Android phones in LatAm/Africa takes 15–30+ seconds and risks OOM crashes. Production mobile SDKs bundle **native C++/Rust `rapidsnark` (or Noir Barretenberg)** bindings alongside `@vultisig/lib-dkls`, targeting `< 2–3s` client proving times.
+1. **Clean-Room Fork + Samourai-Immune Zero-`%` Withdrawal Policy + Independent Audit:** Fork MIT-licensed `0xbow-io/privacy-pools` / `railgun-privacy/contract` foundations (`0%` external DAO tax and **`0%` Vultisig protocol percentage toll on shielded deposits, internal transfers, or withdrawals**). Eliminating percentage-based fees on private withdrawals removes the core *Samourai Wallet* coordinator-fee enforcement vector: Vultisig monetizes B2B SaaS software licenses and standard asset swaps, while relayer nodes earn only **flat gas/batch-slot relay fees** (identical whether moving `$500` or `$500,000`). Because adding 2-of-3 EdDSA + hidden gateway verification modifies the Circom/Noir circuits, **Phase 2 Mainnet launch explicitly gates on a dedicated circuit + contract audit and a Phase-2 Trusted Setup ceremony (or Noir/UltraHonk)**.
+2. **Native Mobile Proving (No SnarkJS in WebView):** Generating ~60k–90k constraint proofs in `snarkjs`/JS on budget Android phones in LatAm/Africa takes 15–30+ seconds and risks OOM crashes. Production mobile SDKs bundle **native C++/Rust `rapidsnark` (or Noir Barretenberg)** bindings alongside `@vultisig/lib-dkls` (built in Phase 2 once Stage-Gate #1 proves demand), targeting `< 2–3s` client proving times.
 3. **Two-Mode Payouts (Eliminating Odd-Amount Unshield Fingerprints):**
    * *Internal Shielded Payroll (Zero Amount Leakage):* Exact odd amounts (e.g., `$3,420.50`) transfer **shielded-to-shielded** inside the pool (`Note_Company -> Note_Employee`). No amount ever touches public L2 calldata.
    * *Public EOA Unshields (Strict Denomination Quantization):* Whenever funds exit the pool to a public address, the SDK enforces **fixed quantized denominations** (`$100`, `$500`, `$1,000`, `$5,000`) dispatched across **randomized cross-window jitter** inside the "Shuttle" queue—never dumping `$1,000 + $1,000 + $1,000 + $420.50` in the same batch. Any odd remainder stays inside the corporate shielded note as internal change.
 4. **Separation of Duties for Permissionless `$VULT` Nodes vs Independent ASPs:**
-   * **Permissionless `$VULT` Relayer Nodes (Anyone Can Operate):** Verify public ASP inclusion proofs, sponsor L2 gas for retail cover and payroll recipients, and run the dynamic "Shuttle" batch queue under deterministic Timeout Proof slashing.
+   * **Permissionless `$VULT` Infrastructure Nodes (Phase 3, Post-Critical Mass):** Verify public ASP inclusion proofs, execute ERC-4337 Paymaster / FastVault Co-signer SLA duties, and run the dynamic "Shuttle" batch queue for **flat per-tx/slot gas fees** under deterministic Timeout Proof slashing.
    * **Independent Accredited ASPs (Non-Node Governance):** Licensed compliance entities—never Vultisig Labs and never anonymous gas relayers—sign periodic updates to `ASP_root` and `G_root`, isolating tainted deposits while shielding relayer operators from discretionary AML/MSB liability.
 
 ---
@@ -302,79 +302,75 @@ The user holds only stablecoins (e.g., Base.USDC). They never buy ETH for gas:
 * The neobank sponsors the negligible L2 gas fee ($0.001 on Base) or automatically deducts a $0.05 fee directly in USDC.
 * **UX Result:** The user opens the app, enters "Send $20 to Maria", confirms with FaceID, and the transfer settles in 1 second.
 
-### 5.4 WaaS Monetization & Commercial Packaging (Day-1 Revenue Engine)
-Unlike ZK-Shielded Pools—which require external circuit audits and initial $k$-anonymity liquidity before generating meaningful fee volume—**Neobank WaaS leverages Vultisig’s existing production DKLS stack** and monetizes immediately through three high-margin layers:
+### 5.4 WaaS & B2B Multi-Chain SaaS Monetization (Stage 1 Revenue Engine)
+Unlike ZK-Shielded Pools—which require external circuit audits, multi-platform native provers, and initial $k$-anonymity liquidity—**Neobank WaaS and B2B Multi-Chain Treasury SaaS leverage Vultisig’s existing production DKLS stack across BTC, SOL, and EVM** and monetize immediately with higher unit margin and zero mixing/withdrawal-fee risk:
 
-| Revenue Stream | Pricing Structure | Example Partner Economics (50k MAU Neobank) |
+| Revenue Stream | Pricing Structure | Example Partner Economics (50k MAU Neobank / B2B Stack) |
 | :--- | :--- | :--- |
-| **1. White-Label Platform SaaS** | `$2,000 – $5,000 / month` base license + SLA | `$3,000 / mo` recurring baseline |
+| **1. WaaS & B2B Treasury SaaS** | `$2,000 – $5,000 / mo` WaaS license; `$400 – $1,500 / mo` B2B multi-chain & ERP suite | `$3,000 / mo` WaaS baseline (or `$500/mo` per B2B team) |
 | **2. Active Wallet Usage (MAU)** | `$0.10 – $0.20 / active user / month` above 10k free tier | `(50k - 10k) × $0.15 = $6,000 / mo` |
-| **3. Embedded Swap / Bridge / Yield** | **`0.25% – 0.40%` (25–40 bps)** router fee on in-app FX, token swaps & cross-chain USDC | `$15M/mo swap volume × 0.30% = $45,000 / mo` |
+| **3. Clean Swap / Bridge / FX Routing** | **`0.25% – 0.40%` (25–40 bps)** standard UI/router fee on FX, swaps & cross-chain rebalancing (`BTC↔SOL↔USDC`) | `$15M/mo swap volume × 0.30% = $45,000 / mo` |
 
-* **Why Fintechs Pay Happily:** Regional neobanks charge end-users `1%–2%` on FX/remittances vs legacy `5%–9%` wire fees. Paying Vultisig `$9k/mo` SaaS + `30 bps` on swaps is a fraction of building and auditing an in-house MPC infrastructure (`$500k+` and 12+ months).
-* **The Flywheel Effect:** Every onboarded neobank and card program solves two problems at once—generating high-margin USDC revenue in Phase 1 **and** supplying the high-frequency, KYC-attested retail transactions that power `k ≥ 40–80` anonymity when the ZK-Pool launches in Phase 2.
+* **Why Clean Swaps + SaaS Beats Withdrawal Tolls (`3x–4x` Margin, `4x` Lower CAPEX):** On `$100M` of volume, keeping `0.30%` on standard swaps yields **`$300k`** for the protocol vs **`$100k`** from a `0.10%` protocol share of a `0.25%` ZK withdrawal fee—with **zero** DOJ *Samourai* coordinator-fee exposure and **4–5x lower upfront R&D** (`$125k–$165k` vs `$565k–$810k`).
+* **Why B2B Teams & Fintechs Pay:** Regional neobanks avoid `$500k+` in-house MPC R&D, while Web3 treasuries get **native BTC + SOL + EVM custody with 1-click cross-chain swaps** (impossible in EVM-only Safe multisigs).
+* **The Flywheel Effect:** Stage 1 builds recurring USDC revenue and seeds **both** the resting L2 USDC TVL and the KYC-attested transaction density needed before unlocking Phase 2 ZK privacy and Phase 3 nodes.
 
 ---
 
-## 6. Dual-Engine Business Model & $VULT Tokenomics
+## 6. Two-Stage Business Model, Samourai-Safe Fees & $VULT Tokenomics
 
-Vultisig avoids the classic Web3 mistake of forcing corporate CFOs to buy volatile tokens or relying solely on one slow-ramping fee stream. Instead, **both** commercial engines (**Neobank WaaS** and **B2B Privacy Pool**) settle in pure USDC and feed value into `$VULT`.
+Vultisig avoids two fatal Web3 traps: (1) forcing corporate CFOs to hold volatile tokens, and (2) launching idle "yield nodes" before transaction volume exists—or extracting risky `%` tolls on private withdrawals. Instead, value capture follows a clean **two-stage sequence**:
 
 ```
-  [ ENGINE A: NEOBANK WaaS ]               [ ENGINE B: B2B ZK-POOL ]
-  • SaaS + MAU ($3k–$15k/partner)          • 0.25% Shielded Settlement (USDC)
-  • 0.25%–0.40% Embedded Swaps             • ERP / Audit Export Add-on
-               │                                        │
-               │                        ┌───────────────┴───────────────┐
-               │                        ▼ (60% = 15 bps)                ▼ (40% = 10 bps)
-               │              [ PERMISSIONLESS NODES ]      [ PROTOCOL TREASURY & ]
-               │              • Anyone can bond 100k $VULT  [  BUYBACK ENGINE     ]
-               │              • Earns Pure USDC Yield                   │
-               │                (covers retail cover gas)               │
-               └────────────────────────┬───────────────────────────────┘
-                                        ▼
-                   [ PROGRAMMATIC OPEN-MARKET $VULT BUYBACK ]
-                 + [ OPTIONAL PSP/GATEWAY FEE-DISCOUNT LOCKS ]
+  [ STAGE 1 (M1–M4): B2B SaaS + WaaS + CLEAN SWAPS ]   (ZERO NODES NEEDED YET)
+  • WaaS & B2B Treasury SaaS + MAU + ERP Connectors
+  • 0.25%–0.40% Clean Swap/Bridge Routing (BTC/SOL/EVM)
+                        │
+        ┌───────────────┴───────────────┐
+        ▼                               ▼
+  [ PROGRAMMATIC $VULT BUYBACKS ]   [ OPTIONAL SWAP & SAAS ]
+  (25% Net USDC Profit -> $VULT)    [  FEE-DISCOUNT LOCKS  ]
+                        │
+  ══════════════════════▼══════════════════════════════════════════════════
+  [ STAGE 2–3 (POST-CRITICAL MASS): ZK PRIVACY + INFRASTRUCTURE NODES ]
+  • Shielded Pool Protocol Toll: 0% (Zero % tax on private withdrawals!)
+  • B2B Privacy monetized via Enterprise SaaS + ERP Compliance Suite
+  • Permissionless Nodes (Bond 100k $VULT) perform REAL paid work:
+     1. Decentralized FastVault Co-signer & ERC-4337 Paymaster -> Flat Gas Spread + SLA
+     2. Stateless ZK Shuttle Batcher -> Flat $0.75–$2.00/slot (Amount-Agnostic!)
 ```
 
-### 6.1 Permissionless Privacy Nodes & Clean 60/40 Fee Split
-**Critical Architectural Boundary:** `$VULT` nodes **do NOT participate in the user's Keysign ceremony**. `Vultisigner` and local peer-to-peer devices remain completely untouched.
-
-Instead, **anyone** can run a permissionless lightweight node functioning strictly as a **Stateless Privacy Relayer & Batcher**:
-* **Why Relayers Are Mandatory:** In any ZK privacy protocol, a user cannot broadcast a private withdrawal from their public wallet without paying ETH gas from a known address—instantly ruining privacy. A third-party relayer must submit the ZK-proof and pay L2 gas.
-* **Permissionless Bond Requirement:** Anyone can bond **100,000 `$VULT`** in an on-chain registry contract on Arbitrum/Base to become eligible for B2B relayer jobs routed by Vultisig clients (preventing Sybil attacks and censorship without gatekeeping operators).
-* **Deterministic On-Chain Slashing (Timeout Proof):** Slashing is enforced entirely by the registry smart contract, not off-chain arbitration:
-  1. When a node accepts a relayer job commitment, the contract starts a strict block-window countdown.
-  2. If the node drops the job, stalls beyond the deadline, or attempts MEV reordering/front-running, the user's client submits an on-chain **Timeout Proof**.
-  3. The registry contract automatically **jails** the node (locking its bond for **7–14 days** with zero fee allocation) and **burns a slashing penalty** (`1%` for timeout/downtime; up to `10%` for invalid state submission). Nodes do not maintain ASP lists and bear zero discretionary sanctions-curation liability.
-* **Transparent 60 / 40 Revenue Split (Base `0.25%` Shielded Fee in USDC):**
-  * **60% (`0.15%`) → Permissionless Relayer Nodes (USDC Real Yield):** Paid directly to the executing node (net of negligible Base L2 gas and a tiny pooled `~$0.005–$0.01/tx` retail cover gas subsidy).
-  * **40% (`0.10%`) → Protocol Treasury & `$VULT` Buyback Engine:** Funds ongoing protocol operations, security maintenance, and programmatic open-market `$VULT` buybacks.
+### 6.1 Stage 1 Value Capture (No Idle Nodes) vs Stage 3 Permissionless Nodes
+* **Why Zero Nodes in Stage 1:** Paying passive "node rewards" from SaaS or swap revenue when nodes do no infrastructural work wastes margin and creates securities (Howey) risk. In Stage 1, 100% of surplus value flows cleanly into **$VULT via programmatic open-market buybacks (`25%` of net USDC revenue)** and **optional `$VULT` discount locks**.
+* **When Permissionless Nodes Launch (Stage 3 — Post-Critical Mass):** Once WaaS and B2B clients generate sustained transaction volume, anyone can bond **100,000 `$VULT`** in an on-chain registry contract on Arbitrum/Base to earn real USDC for two concrete infrastructure services (without touching user custody or breaking local DKLS Keysign):
+  1. **Decentralized FastVault Co-signer & ERC-4337 Paymaster Relayer:** Eliminates single-server reliance on Vultisig Labs for WaaS Share #2 policy checks and sponsors L2 gas—earning **flat per-UserOp USDC gas spreads (`~$0.03–$0.05` net)** plus **Co-signer SLA infrastructure rewards** funded from the WaaS SaaS budget.
+  2. **Stateless ZK Shuttle Batcher (Zero-`%` Withdrawal Toll):** Submits batched ZK-proofs and pays L2 gas under deterministic **Timeout Proof slashing** (`7–14 day` jail + `1%–10%` bond burn for dropped/stalled jobs). Nodes earn a **flat per-slot relay fee (`$0.75–$2.00` per batch slot, independent of `$500` or `$500,000` inside)**—functioning strictly as a standard ERC-4337/Flashbots bundler rather than a `%` mixing toll.
 
 ### 6.2 Optional Fee-Discount Locks (Zero Mandatory Corporate Buying)
-Corporations are **never required** to buy or hold `$VULT` on their balance sheet. Pure USDC billing is the default; locking `$VULT` is strictly an **optional optimization** primarily suited for high-volume PSPs, OTC desks, WaaS partners, and accredited gateways:
-* **Default Enterprise Rate (Zero Lock):** Flat **`0.25%`** USDC settlement fee (zero token exposure, pure stablecoin invoicing).
-* **Optional Tier 1 (Lock 50,000 $VULT):** Reduced **`0.18%`** fee tier (primarily economical once monthly volume exceeds `~$7M/mo` or aggregated across a gateway/PSP).
-* **Optional Tier 2 (Lock 100,000 $VULT):** Lowest **`0.12%`** fee tier + priority Shuttle routing & WaaS swap-share rebate.
-* **Optional Add-On (Enterprise Compliance Suite):** `$500 – $1,500 / month` for automated QuickBooks/Xero/NetSuite ReadOnly audit log connectors.
+Corporations are **never required** to buy or hold `$VULT`. Pure USDC billing is the default; locking `$VULT` is strictly an **optional optimization** on **clean Swap/Bridge routing and SaaS quotas** (never tied to private withdrawal percentages):
+* **Default Enterprise Rate (Zero Lock):** Standard **`0.30%–0.35%`** swap/FX router fee + flat USD/USDC SaaS subscription (`0%` shielded withdrawal fee).
+* **Optional Tier 1 (Lock 50,000 $VULT):** Reduced **`0.22%`** swap/bridge router tier + included B2B SaaS seat/MAU quota.
+* **Optional Tier 2 (Lock 100,000 $VULT):** Lowest **`0.15%`** swap/bridge router tier + priority Paymaster/Shuttle SLA routing for high-volume PSPs, WaaS partners, and OTC desks.
+* **Enterprise Privacy & ERP Suite (ZK-Pool Add-On):** `$500 – $1,500 / month` SaaS add-on for automated QuickBooks/Xero/NetSuite ReadOnly (`sk_view`) audit log connectors and gateway compliance orchestration.
 
-### 6.3 Realistic Revenue & Token Sink Scenarios (Dual-Engine Math)
-Rather than assuming every corporate client buys and locks `$VULT`, token demand is anchored in **permissionless node operators chasing real USDC yield**, **optional partner/PSP locks**, and **programmatic buybacks** funded by *both* WaaS and ZK-Pool USDC revenue (allocating e.g. **25% of protocol net revenue** to programmatic `$VULT` buybacks):
+### 6.3 Realistic Revenue & Token Sink Scenarios (Stage-Gated Math)
+Because monetization rests on **B2B/WaaS SaaS + clean Swap Routing** (rather than taxing private withdrawals), Vultisig generates higher net protocol revenue from Month 6 onward with zero *Samourai* exposure, while Phase 3 nodes earn real USDC yield from flat high-frequency gas spreads and SLA slots:
 
-| Metric | Conservative (Month 14) | Base Case (Month 18) | Scale Case (Month 24) |
+| Metric | Stage 1 Live (Month 6 — Pre-Nodes) | Base Case (Month 15 — Full Flywheel) | Scale Case (Month 24) |
 | :--- | :--- | :--- | :--- |
-| **Active WaaS Fintechs / Neobanks** | 4 partners (`80k` MAU) | 12 partners (`300k` MAU) | 30 partners (`1M` MAU) |
-| **WaaS Monthly Swap/Bridge Volume** | `$20M / mo` (`0.30%`) | `$75M / mo` (`0.30%`) | `$250M / mo` (`0.25%`) |
-| **WaaS Monthly Revenue (SaaS + MAU + Swaps)** | **`$75,000 / mo`** | **`$290,000 / mo`** | **`$825,000 / mo`** |
-| **B2B ZK-Pool Monthly Volume** | `$15M / mo` (`0.25%`) | `$60M / mo` (`0.25%`) | `$200M / mo` (`0.20%`) |
-| **ZK-Pool Gross Fees (60% Nodes / 40% Protocol)** | `$37.5k` (`$22.5k` / `$15k`) | `$150k` (`$90k` / `$60k`) | `$400k` (`$240k` / `$160k`) |
-| **Total Protocol Net Revenue (WaaS + 40% ZK)** | **`$90,000 / mo`** | **`$350,000 / mo`** | **`$985,000 / mo`** |
-| **Annualized `$VULT` Buyback Pressure (25% Share)** | **`$270,000 / yr`** | **`$1,050,000 / yr`** | **`$2,955,000 / yr`** |
-| **Permissionless Nodes (`100k $VULT` each)** | 50 nodes (`5.0M $VULT`) | 120 nodes (`12.0M $VULT`) | 220 nodes (`22.0M $VULT`) |
-| **Optional Partner/Gateway Locks (`50k–100k`)** | 10 partners (`0.75M $VULT`) | 25 partners (`2.0M $VULT`) | 60 partners (`5.0M $VULT`) |
-| **Total Supply Locked (% of 100M Cap)** | **`5.75M (5.75%)`** | **`14.0M (14.0%)`** | **`27.0M (27.0%)`** |
+| **Active WaaS & B2B SaaS Clients** | 3 WaaS (`60k` MAU) + 15 B2B teams | 12 WaaS (`300k` MAU) + 60 B2B teams | 30 WaaS (`1M` MAU) + 180 B2B teams |
+| **Monthly Clean Swap / FX Volume** | `$20M / mo` (`0.30%`) | `$85M / mo` (`0.30%`) | `$280M / mo` (`0.25%`) |
+| **SaaS + MAU + ERP Suite Revenue** | **`$20,000 / mo`** | **`$95,000 / mo`** | **`$285,000 / mo`** |
+| **Clean Swap / Bridge Router Revenue** | **`$60,000 / mo`** | **`$255,000 / mo`** | **`$700,000 / mo`** |
+| **Total Protocol Net Revenue (USDC)** | **`$80,000 / mo`** (`$960k/yr`) | **`$350,000 / mo`** (`$4.2M/yr`) | **`$985,000 / mo`** (`$11.8M/yr`) |
+| **Shielded Pool `%` Withdrawal Tax** | `N/A` (`0%` always) | **`0%`** (Flat bundler fee only) | **`0%`** (Flat bundler fee only) |
+| **Node Operator USDC Yield (Flat Paymaster/SLA + Batch Slots)** | `$0` (Nodes not launched yet) | **`~$65,000 / mo`** (`~$7.8k/yr` per node) | **`~$215,000 / mo`** (`~$11.7k/yr` per node) |
+| **Annualized `$VULT` Buyback Pressure (25% Net Revenue)** | **`$240,000 / yr`** | **`$1,050,000 / yr`** | **`$2,955,000 / yr`** |
+| **Permissionless Nodes (`100k $VULT` each)** | `0` (Launched in Phase 3) | 100 nodes (`10.0M $VULT`) | 220 nodes (`22.0M $VULT`) |
+| **Optional Partner Swap/SaaS Locks (`50k–100k`)** | 6 partners (`0.5M $VULT`) | 25 partners (`2.0M $VULT`) | 60 partners (`5.0M $VULT`) |
+| **Total Supply Locked (% of 100M Cap)** | **`0.5M (0.5%)`** | **`12.0M (12.0%)`** | **`27.0M (27.0%)`** |
 
-**Key Economic Takeaway:** Even if **zero** traditional corporations buy `$VULT`, WaaS provides immediate `$75k–$290k/mo` cashflow early on, while permissionless relayer yields + optional partner locks + continuous USDC buybacks remove `14%–27%` of supply sustainably without synthetic emissions.
+**Key Economic Takeaway:** Stage 1 reaches **`~$80k/mo`** with zero ZK circuits, zero nodes, and zero withdrawal-tax risk—proving product-market fit before Phase 2 ZK capital is deployed. At scale, buybacks (`$1.05M–$2.95M/yr`), optional swap/SaaS locks, and real-yield Paymaster/Batcher nodes lock `12%–27%` of supply sustainably.
 
 ---
 
@@ -405,35 +401,39 @@ A realistic engineering view is critical here: while **~75–85% of foundational
 | **On-Chain Attestations** | [ethereum-attestation-service/eas-contracts](https://github.com/ethereum-attestation-service/eas-contracts) | MIT | Standardized contract infrastructure for licensed gateway KYB passes and epoch key registries. |
 | **Threshold Core (TSS)** | [vultisig/lib-dkls](https://github.com/vultisig/lib-dkls) & [@vultisig/sdk](https://github.com/vultisig/vultisig-windows) | Apache-2.0 | Vultisig's existing WASM/native DKLS23 engine + P2P WebRTC quorum coordination. |
 
-### 8.2 Detailed Phase-by-Phase Budget & Cost Breakdown
+### 8.2 Detailed Stage-Gated Budget & Cost Breakdown
 
-#### Phase 1 (Months 1–4): Commercial WaaS Production SDK + ZK-Core Testnet MVP — **`$165,000 – $205,000`**
+To avoid building unvalidated ZK infrastructure without paying customers, capital is strictly **stage-gated**: Phase 1 commits only **`$125k–$165k`** on existing DKLS rails to win paying WaaS/B2B clients; Phase 2 ZK engineering & audits unlock **only after Stage-Gate #1 is passed**.
+
+#### Phase 1 (Months 1–4): Lean Commercial WaaS + B2B Treasury SaaS + Swaps (Existing DKLS) — **`$125,000 – $165,000`**
 | Line Item | Scope & Market Assumptions | Cost Range |
 | :--- | :--- | :--- |
-| **Senior ZK / Solidity Engineer** | 4 months × `$14k–$16k/mo` (2-of-3 EdDSA + ECDH/Poseidon circuits, 4,096-root pool fork) | `$56,000 – $64,000` |
 | **Senior MPC / Mobile SDK Engineer** | 4 months × `$12k–$14k/mo` (`@vultisig/waas-sdk`, FastVault Share-2 HSM worker, Key Resharing) | `$48,000 – $56,000` |
-| **Full-Stack / Relayer / DevOps Engineer** | 4 months × `$9k–$11k/mo` (ERC-4337 Paymaster, 30 bps Swap Router, Shuttle Testnet relayer) | `$36,000 – $44,000` |
-| **WaaS Paymaster / Contract Review** | Focused security review of ERC-4337 Paymaster & WaaS swap router contracts | `$12,000 – $22,000` |
-| **Infrastructure & Tooling** | Dedicated Base/Arbitrum RPCs, cloud HSM/KMS enclaves, CI/CD, iOS/Android test devices | `$13,000 – $19,000` |
+| **Full-Stack / Paymaster / Swap Engineer** | 4 months × `$9k–$11k/mo` (ERC-4337 USDC Paymaster, `25–40 bps` BTC/SOL/EVM Swap Router) | `$36,000 – $44,000` |
+| **B2B Treasury SaaS & ERP Connector Dev** | 2–3 months sprint (Multi-chain approval policies, QuickBooks/Xero export, `$VULT` buyback/discount hooks) | `$18,000 – $28,000` |
+| **Paymaster / Router Security Review & Infra** | Focused review of ERC-4337 Paymaster & swap router (`$12k–$20k`) + RPCs, cloud HSM, test devices | `$23,000 – $37,000` |
 
-#### Phase 2 (Months 5–9): Independent ZK Audits, Cover-Flow Integration & Mainnet B2B Launch — **`$285,000 – $440,000`**
+> **Stage-Gate #1 (End of Month 4):** Phase 2 ZK capital commits **only** upon securing `2–3` paying WaaS/B2B pilots (`$40k+/mo` SaaS+swap run-rate) or signed B2B enterprise LOIs.
+
+#### Phase 2 (Months 5–10): Customer-Gated ZK-Core, Independent Audits & B2B Mainnet — **`$325,000 – $480,000`**
 | Line Item | Scope & Market Assumptions | Cost Range |
 | :--- | :--- | :--- |
+| **ZK Circuit & Pool Engineering** | 4–5 months senior ZK/Solidity (`2-of-3 EdDSA` + `pk_nullifier` + hidden `G_root` + 4,096-root pool) | `$55,000 – $70,000` |
 | **Custom ZK Circuit & Pool Audit** | Top-tier / specialized ZK firm (Veridise, zkSecurity, ABDK, Trail of Bits); 8–12 weeks incl. queue | `$120,000 – $220,000` |
 | **Ceremony + Initial Bug Bounty** | Phase-2 Trusted Setup ceremony (`$20k–$35k`, **$0 if Noir/UltraHonk**) + Immunefi launch reserve | `$30,000 – $60,000` |
-| **Engineering Remediation & Mobile Prover** | 5 months (audit fixes, native `rapidsnark` / Noir mobile bindings, Auditor Desktop UI, ASP/Gateway APIs) | `$120,000 – $140,000` |
-| **Legal & Gateway Structuring** | Non-custodial legal opinion (US/EU) + standard commercial agreements with 2–3 licensed gateways/ASPs | `$15,000 – $20,000` |
+| **4-Platform Native Prover & Auditor UI** | Native `rapidsnark` / Noir bindings (iOS/Android/Desktop/Web `<3s`), Auditor UI, ASP/Gateway APIs | `$105,000 – $110,000` |
+| **Legal & Gateway Structuring** | Non-custodial + zero-`%`-withdrawal legal opinion (US/EU) + agreements with 2–3 gateways/ASPs | `$15,000 – $20,000` |
 
-#### Phase 3 (Months 10–14): Permissionless `$VULT` Relayer Network & Dual-Engine Tokenomics — **`$115,000 – $165,000`**
+#### Phase 3 (Months 11–14): Permissionless `$VULT` Co-Signer, Paymaster & Shuttle Nodes — **`$115,000 – $165,000`**
 | Line Item | Scope & Market Assumptions | Cost Range |
 | :--- | :--- | :--- |
-| **Staking & Slashing Contract Audit** | Audit of 100k `$VULT` registry, Timeout Proof slashing, 60/40 USDC splitter & buyback router | `$35,000 – $55,000` |
-| **Relayer Daemon & Tokenomics Dev** | 4 months (Go/Rust stateless relayer daemon, slashing watcher, optional fee-tier contracts, monitoring) | `$70,000 – $95,000` |
-| **Node Testnet Incentives & Ops** | Incentivized testnet for external relayer operators + telemetry/alerting infrastructure | `$10,000 – $15,000` |
+| **Staking & Slashing Contract Audit** | Audit of 100k `$VULT` registry, Timeout Proof slashing, flat-fee Paymaster/Batcher & SLA splitter | `$35,000 – $55,000` |
+| **Node Daemon & Tokenomics Dev** | 4 months (Go/Rust Co-signer/Paymaster/Shuttle daemon, slashing watcher, optional swap/SaaS lock tiers) | `$70,000 – $95,000` |
+| **Node Testnet Incentives & Ops** | Incentivized testnet for external operators + SLA telemetry/alerting infrastructure | `$10,000 – $15,000` |
 
-#### Summary Capital Plan (14-Month Total)
-* **Gross Total (Phases 1–3):** **`$565,000 – $810,000`** across 12–14 months.
-* **Net External Capital Needed:** Because WaaS begins onboarding paying fintechs from Month 4–5 (`$50k–$150k+/mo` potential as pilots scale) alongside Base/Arbitrum builder grants (`$75k–$200k`), Phase 1 requires committed upfront capital (`~$185k`), while Phase 2–3 are co-funded by WaaS cashflow and ecosystem grants.
+#### Summary Capital Plan (14-Month Full-Stack Total)
+* **Upfront At-Risk Capital (Phase 1 Only):** **`$125,000 – $165,000`** (already builds a standalone, revenue-generating B2B/WaaS + Swap product on existing DKLS).
+* **Full 3-Phase Gross Total (If Stage-Gate #1 Unlocks ZK & Nodes):** **`$565,000 – $810,000`** across 12–14 months, with Phase 2–3 heavily co-funded by Stage 1 WaaS/Swap cashflow (`~$80k+/mo` by Month 6) and Base/Arbitrum ecosystem grants (`$75k–$200k`).
 
 ---
 
@@ -491,37 +491,89 @@ Beyond financial transactions, global institutions face catastrophic liabilities
 
 ---
 
-## 10. Detailed Launch Sequence & 14-Month Engineering Roadmap
+## 10. Detailed Stage-Gated Launch Sequence & 14-Month Engineering Roadmap
 
 ```
-PHASE 1: Commercial WaaS Production + ZK-Core Testnet (Months 1–4) [$165k–$205k]
-├── [M1–M2 | WaaS Core] Package @vultisig/waas-sdk (iOS/Android), FastVault Share-2 K8s/HSM worker & Key Resharing.
-├── [M2–M3 | WaaS Money] Integrate ERC-4337 Paymaster (USDC gas) + 30 bps Swap/Bridge router; run Paymaster security review.
-├── [M3–M4 | Pilots] Sign & integrate 2–3 neobank/card fintech design partners (generating first SaaS + swap revenue).
-├── [M1–M3 | ZK Quorum] Implement per-device BabyJubJub EdDSA + in-circuit 2-of-3 EdDSAPoseidonVerifier + separate sk_view/sk_nullifier.
-├── [M2–M4 | ZK Circuits] Build ECDH+Poseidon Dual-Recipient circuit with PRIVATE G_root Gateway verification (epoch rotation).
-└── [M3–M4 | Testnet] Fork MIT pool contracts on Base Sepolia (4,096-root ring buffer + quantized unshields) + Shuttle Testnet relayer.
+PHASE 1: Lean Commercial B2B SaaS + Neobank WaaS + Clean Swaps (Months 1–4) [$125k–$165k]
+├── [M1–M2 | WaaS Core] Package @vultisig/waas-sdk (existing DKLS BTC/SOL/EVM), FastVault Share-2 HSM worker & Key Resharing.
+├── [M2–M3 | Monetization] Ship ERC-4337 Paymaster (USDC gas), 25–40 bps Swap/Bridge Router & B2B Treasury SaaS + ERP export.
+├── [M3–M4 | Token Flywheel] Activate 25% net USDC revenue -> $VULT buybacks & optional swap/SaaS discount locks (zero nodes yet).
+└── [M4    | STAGE-GATE #1] Onboard 2–3 paying neobank/B2B pilots (~$40k+/mo run-rate or signed LOIs) before committing ZK capital.
 
-PHASE 2: Independent ZK Audits, Cover-Flow Integration & B2B Mainnet (Months 5–9) [$285k–$440k]
-├── [M5 | Booking] Freeze ZK circuit/contract specs & lock 8–12 week audit slot (Veridise / ABDK / Trail of Bits / zkSecurity).
-├── [M5–M7 | Mobile Prover] Bundle native C++/Rust rapidsnark (or Noir UltraHonk) alongside @vultisig/lib-dkls (<3s proving) + Auditor UI.
-├── [M6–M8 | Compliance] Execute non-custodial legal opinion & integrate 2–3 licensed regional gateways/ASPs (ASP_root + G_root).
-├── [M7–M8 | Remediation] Resolve audit findings, run Phase-2 Trusted Setup (if Groth16) & launch Immunefi bug bounty reserve.
-└── [M9 | Mainnet Launch] Route attested WaaS/card retail traffic as gasless cover flow and launch Compliant B2B ZK-Pool Mainnet (using initial protocol/partner relayers until Phase 3 permissionless staking opens).
+PHASE 2: Customer-Gated ZK-Core, Audits & B2B Mainnet (Months 5–10) [$325k–$480k | Co-Funded by WaaS + Grants]
+├── [M5–M6 | ZK Build] Implement 2-of-3 EdDSA + pk_nullifier quorum_hash + hidden G_root circuits & Base Sepolia 4,096-root pool.
+├── [M6–M8 | Audits & Prover] Run 8–12w circuit/contract audit (Veridise/ABDK/Trail of Bits) + 4-platform rapidsnark/Noir (<3s).
+├── [M7–M9 | Compliance] Execute non-custodial + 0%-withdrawal-fee legal opinion; integrate 2–3 licensed gateways/ASPs (ASP_root/G_root).
+└── [M10   | Mainnet Launch] Layer 0%-tax ZK-Pool onto active Phase 1 WaaS resting TVL & gasless retail cover (initial partner relayers).
 
-PHASE 3: Permissionless $VULT Relayer Network & Dual-Engine Tokenomics (Months 10–14) [$115k–$165k]
-├── [M10–M11 | Contracts] Build 100k $VULT Relayer Registry, Timeout Proof Slashing, 60/40 USDC Splitter & optional fee-tier contracts.
-├── [M11–M12 | Audit & Daemon] Audit staking/slashing contracts & ship lightweight Go/Rust stateless relayer daemon + monitoring.
-├── [M12–M13 | Incentivized Net] Run permissionless relayer testnet & stress-test Shuttle batching + Timeout Proof jailing.
-└── [M14 | Full Flywheel] Activate Mainnet permissionless nodes, 60/40 USDC Real Yield, and 25% WaaS+ZK programmatic $VULT buybacks.
+PHASE 3: Permissionless $VULT Infrastructure Nodes (Months 11–14) [$115k–$165k]
+├── [M11–M12 | Contracts] Build & audit 100k $VULT Registry, Timeout Proof Slashing & flat-fee Paymaster/Batcher/SLA splitters.
+├── [M12–M13 | Node Ops] Ship Go/Rust Co-signer/Paymaster/Shuttle daemon & run incentivized operator testnet under SLA stress tests.
+└── [M14     | Full Network] Activate Mainnet permissionless nodes earning real USDC via flat gas/batch slots & Co-signer SLA fees.
 ```
 
 ---
 
 ## 11. Conclusion: The Strategic Path Forward
 
-The Web3 market does not need another retail DEX aggregator or another basic crypto wallet. The retail market is saturated and low-margin.
+The Web3 market does not need another speculative token or an unvalidated `$800k` ZK build with zero customers. At the same time, purely public corporate wallets leave businesses exposed—and legacy privacy pools charging `%` withdrawal tolls carry unacceptable *Samourai/Tornado* legal exposure.
 
-By pairing an **immediately monetizable Neobank WaaS SDK** with the **first legal, compliant, B2B ZK-Privacy layer**, Vultisig solves both cold-start liquidity and early cashflow: WaaS launches first (Months 1–4) to generate recurring SaaS and swap revenue while building the verified retail cover traffic that makes B2B payroll privacy mathematically robust. Over a realistic **12–14 month roadmap (`$565k–$810k` gross, co-funded after Phase 1 by WaaS cashflow and L2 grants)**, permissionless relayer nodes, optional partner fee-discount locks, and programmatic USDC-to-`$VULT` buybacks align token value with real commercial volume—without forcing corporate CFOs to hold volatile tokens.
+By sequencing **B2B Multi-Chain SaaS + Neobank WaaS + Clean Swaps first (`$125k–$165k`, Months 1–4)** on Vultisig’s existing DKLS stack, Vultisig captures immediate, high-margin revenue (`3x–4x` cleaner margin than withdrawal tolls), drives programmatic `$VULT` buybacks from Day 1, and builds the resting L2 liquidity and retail cover flow organically. Only once **Stage-Gate #1** proves commercial traction does Phase 2 unlock the audited `2-of-3 EdDSA` ZK-Pool (`0%` withdrawal toll), followed in Phase 3 by permissionless `100k $VULT` infrastructure nodes earning sustainable USDC yield from flat gas/batching spreads and Co-signer SLA fees.
 
-**Recommended Action for Core Leadership:** Fund Phase 1 (`$165k–$205k`, Months 1–4) to ship the commercial `@vultisig/waas-sdk` to paying fintech pilots while freezing the audited-path `2-of-3 EdDSA` + hidden-gateway ZK-Pool specs on Base Sepolia ahead of Phase 2 circuit audits.
+**Recommended Action for Core Leadership:** Authorize **Phase 1 (`$125k–$165k`, Months 1–4)** to package `@vultisig/waas-sdk`, B2B Treasury SaaS, and `25–40 bps` swap routing for `2–3` pilot partners—keeping Phase 2 ZK audits strictly gated on signed customer demand.
+
+---
+
+## 12. Appendix: Alternative Execution Sequence via THORWallet Infrastructure
+
+While the primary specification above is architected for Vultisig’s core stack, **the same commercial B2B payroll and compliance architecture can be executed on an accelerated, lower-cost timeline via THORWallet’s existing production infrastructure**—because THORWallet has already solved the hardest part of Stage 1 (live fiat off-ramps, card rails, and Arbitrum KYC attestations).
+
+### 12.1 Why THORWallet’s Starting Position Changes the Sequencing
+Unlike a pure wallet protocol starting from zero on fiat rails, THORWallet already operates key Stage 1 building blocks in production:
+1. **Live Non-Custodial Card & Swiss IBAN Rails:** Through **Fiat24** (FINMA-regulated, Arbitrum Account NFTs) and **Unblock** (global coverage across 175+ countries, Apple Pay / Google Pay), employees paid in stablecoins can spend directly via Mastercard or settle via Swiss IBAN—**eliminating the "1st/15th payday CEX dump" correlation vector without building neobank partnerships from scratch**.
+2. **Existing KYC-Attested Arbitrum Base:** Active THORWallet cardholders already hold on-chain **Fiat24 Account NFTs** on Arbitrum and generate continuous swap/top-up flow.
+3. **Existing Native Swap Engine & USDC Yield Tokenomics (`$TITN`):** Native cross-chain swaps (including private swap routes) are already live, and **`$TITN` on Base already distributes 70% of swap fees in USDC to stakers**—removing the need to invent and audit a brand-new node-staking economy.
+
+### 12.2 Alternative Launch Timeline (Months 1–9 | `$355k–$530k` Full Stack, `$65k–$110k` Upfront)
+
+```
+TRACK 1 (THORWallet Stage 1): B2B Payroll UI + Card/IBAN Off-Ramp (Months 1–3) [$65k–$110k]
+├── [M1–M2 | B2B Dashboard] Build web B2B Payroll & Treasury Console on ported Apache-2.0 DKLS / MPC quorum
+│                           with approval limits, batch invoicing, and QuickBooks/Xero accounting export.
+├── [M2–M3 | Card Payroll]  Integrate batch employee onboarding to THORWallet Mastercard (Fiat24 / Unblock)
+│                           + Swiss IBAN + native BTC/SOL/ETH -> USDC treasury swaps (25–40 bps).
+└── [M3    | STAGE-GATE #1] Monetize immediately via B2B SaaS + Swap/FX fees routed into $TITN USDC yield;
+                            validate 2–3 paying B2B payroll clients before touching custom ZK circuits.
+
+TRACK 2 (Partner-Cleared Stage 2): Bank-Coordinated Arbitrum ZK-Pool (Months 4–9) [$290k–$420k]
+├── [M4    | Bank Sign-Off] Secure explicit compliance pre-clearance from Fiat24 / Unblock:
+│                           (a) 0% protocol withdrawal toll (Samourai-immune),
+│                           (b) Fiat24 Account NFT / EAS whitelist entry gate,
+│                           (c) Mandatory ReadOnly sk_view disclosure to issuing bank for Source-of-Funds.
+├── [M4–M6 | ZK Build]      Deploy Arbitrum 4,096-root MIT pool fork with 2-of-3 EdDSA + pk_nullifier quorum_hash
+│                           and hidden G_root epoch keys (reusing Fiat24/Unblock as accredited gateways).
+└── [M7–M9 | Audit & Live]  Complete Veridise/Trail of Bits audit + native mobile prover; launch corporate
+                            shielded payrolls settling into employee wallets & pre-cleared Mastercard spend.
+
+SKIPPED (Phase 3 Saved): No Custom $VULT-Style Node Economy Needed [$0]
+└── Uses lightweight flat-fee ERC-4337 Arbitrum bundlers ($0.75–$2.00/slot) while routing B2B swap/SaaS
+    surplus directly into the existing $TITN USDC staking pool—saving ~$115k–$165k and 4 months.
+```
+
+### 12.3 Critical Compliance Guardrail for THORWallet (Card Program Protection)
+Because THORWallet relies on regulated card and IBAN partners (Fiat24 under FINMA; Unblock/Mastercard), **card transactions themselves cannot be pushed into an opaque mixer—and card issuers will freeze any flow whose Source of Funds is hidden from the issuing bank**:
+* **What stays hidden:** Employee salaries, contractor rates, and vendor invoices are shielded **from public block explorers (Arbiscan/Etherscan), competitors, and MEV bots** inside the Arbitrum ZK-Pool.
+* **What stays verifiable for Fiat24 / Unblock:** Every corporate depositor completes partner KYB, every retail/employee card user enters via a verified Fiat24/Unblock credential, and whenever shielded payroll funds top up a Mastercard or Swiss IBAN, the issuing bank receives automated **ReadOnly (`sk_view`) Source-of-Funds verification**—proving the exact audited corporate origin of funds without exposing it publicly on-chain.
+
+### 12.4 Side-by-Side Strategic Comparison (Vultisig vs. THORWallet)
+
+| Dimension | Primary Path: **Vultisig** | Alternative Path: **THORWallet** |
+| :--- | :--- | :--- |
+| **Upfront Stage 1 Cost & Time** | **`$125k – $165k`** (Months 1–4): Build WaaS SDK + B2B SaaS + sign fintech partners | **`$65k – $110k`** (Months 1–3): Build B2B Payroll/Treasury UI on existing cards/IBAN & swaps |
+| **Full-Stack Total (Incl. ZK)** | **`$565k – $810k`** across 12–14 months (incl. Phase 3 `$VULT` nodes) | **`$355k – $530k`** across 8–9 months (skips card build & Phase 3 custom node staking) |
+| **Strongest Structural Edge** | Purpose-built `2-of-3` DKLS multi-device corporate quorum + pure open-source perimeter (zero banking partners at risk) | Live **Mastercard + Swiss IBAN** off-ramp in 175+ countries, active Arbitrum Fiat24 NFTs, and live `$TITN` USDC Real Yield |
+| **Primary Execution Risk** | Must win 2–3 WaaS/B2B pilots first to create L2 retail cover flow & off-ramps | Must build B2B quorum UX and secure explicit **Fiat24/Unblock compliance clearance** before enabling any ZK-Pool |
+| **Token Value Mechanism** | Stage 1 `$VULT` buybacks (25% net revenue) → Stage 3 `100k $VULT` Co-signer/Paymaster/Batcher nodes | Immediate routing of B2B swap/FX & SaaS surplus into existing **`$TITN` (70% USDC Fee Return)** staking + discounts |
+
+**Bottom Line for Both Teams:** Vultisig holds the stronger **pure-play infrastructure & multi-device corporate MPC** foundation with zero banking-partner dependency, while THORWallet holds the faster **go-to-market wedge for B2B payroll-to-card** because its Mastercard/IBAN rails and Arbitrum KYC base are already live. In either architecture, **shipping B2B SaaS + swaps + off-ramps first (Track 1) and gating ZK-privacy behind signed corporate demand and a strict `0%` withdrawal-tax policy** eliminates upfront capital waste and *Samourai*-style regulatory risk.
+
